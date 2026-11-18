@@ -274,7 +274,11 @@ def _limit_cpu() -> None:
 
 
 def _smoke_test(bundle_dir: Path, agent_id: str) -> tuple[str, float, str]:
-    """Import, construct and play three default-scenario turns with the real CLI."""
+    """Import, construct and play three default-scenario turns with the real CLI.
+
+    The 10-second wall-clock budget is shared by the import probe and the run.
+    """
+    budget_start = time.perf_counter()
     try:
         probe = subprocess.run(
             [sys.executable, "-c", (
@@ -299,17 +303,17 @@ def _smoke_test(bundle_dir: Path, agent_id: str) -> tuple[str, float, str]:
         "--extra-agent", str(bundle_dir),
         "--turns", "3", "--ui", "none",
     ]
-    started = time.perf_counter()
+    remaining = max(0.01, WALL_SECONDS - (time.perf_counter() - budget_start))
     try:
         run = subprocess.run(
             command, cwd=bundle_dir, capture_output=True, text=True,
-            timeout=WALL_SECONDS, env=_env(), preexec_fn=_limit_cpu,
+            timeout=remaining, env=_env(), preexec_fn=_limit_cpu,
         )
     except subprocess.TimeoutExpired as error:
         raise Rejected(
             f"validation exceeded the {WALL_SECONDS:.0f}-second wall-clock deadline"
         ) from error
-    elapsed = time.perf_counter() - started
+    elapsed = time.perf_counter() - budget_start
     log = run.stdout + run.stderr
     if run.returncode != 0:
         if run.returncode < 0 or "CPU time limit" in run.stderr:
