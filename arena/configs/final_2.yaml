@@ -1,0 +1,188 @@
+# =============================================================================
+#  !!! SPOILER WARNING !!!  HELD-OUT EVALUATION SCENARIO -- DO NOT READ.
+#  Like the organizers' private scenarios, this file is meant to stay unseen.
+#  `arena/run.sh submit` plays it over several seeds.
+# =============================================================================
+# evaluation seeds: [2201, 2202, 2203]
+turns: 40
+seed: 2201
+initial_state:
+  starting_capital: 50000.0
+  initial_inventory: {}
+suppliers:
+  CHIP:
+    production_min: 68
+    production_max: 104
+    base_price: 15.0
+    stock_capacity: 520
+    price_stock_factor: 0.25
+    price_floor_multiplier: 0.55
+    adaptation:
+      enabled: true
+      low_stock_consecutive_turns: 2
+      high_stock_consecutive_turns: 5
+      empty_stock_percentage: 0.05
+      full_stock_percentage: 0.95
+      increase_percentage: 0.15
+      decrease_percentage: 0.08
+  DISPLAY:
+    production_min: 46
+    production_max: 72
+    base_price: 25.0
+    stock_capacity: 358
+    price_stock_factor: 0.3
+    price_floor_multiplier: 0.5
+    adaptation:
+      enabled: true
+      low_stock_consecutive_turns: 2
+      high_stock_consecutive_turns: 5
+      empty_stock_percentage: 0.05
+      full_stock_percentage: 0.95
+      increase_percentage: 0.2
+      decrease_percentage: 0.1
+  BATTERY:
+    production_min: 72
+    production_max: 97
+    base_price: 10.0
+    stock_capacity: 484
+    price_stock_factor: 0.2
+    price_floor_multiplier: 0.5
+    adaptation:
+      enabled: true
+      low_stock_consecutive_turns: 3
+      high_stock_consecutive_turns: 5
+      empty_stock_percentage: 0.05
+      full_stock_percentage: 0.95
+      increase_percentage: 0.12
+      decrease_percentage: 0.1
+  CASING:
+    production_min: 64
+    production_max: 88
+    base_price: 6.0
+    stock_capacity: 440
+    price_stock_factor: 0.15
+    price_floor_multiplier: 0.45
+    adaptation:
+      enabled: true
+      low_stock_consecutive_turns: 3
+      high_stock_consecutive_turns: 4
+      empty_stock_percentage: 0.05
+      full_stock_percentage: 0.95
+      increase_percentage: 0.08
+      decrease_percentage: 0.12
+production:
+  capacity_per_turn: null
+consumer_market:
+  base_customers: 140
+  amplitude: 45
+  period_divisor: 5.0
+  price_sensitivity_beta: 0.01
+  segments:
+    BUDGET:
+      share: 0.45
+      preferences:
+        SMARTWATCH: 3
+        PHONE: 2
+        TABLET: 1
+      willingness_to_pay:
+        SMARTWATCH:
+        - 90.0
+        - 180.0
+        PHONE:
+        - 150.0
+        - 280.0
+        TABLET:
+        - 180.0
+        - 320.0
+    MAINSTREAM:
+      share: 0.35
+      preferences:
+        PHONE: 3
+        TABLET: 2
+        CONSOLE: 1
+        LAPTOP: 1
+      willingness_to_pay:
+        PHONE:
+        - 250.0
+        - 420.0
+        TABLET:
+        - 300.0
+        - 520.0
+        CONSOLE:
+        - 350.0
+        - 600.0
+        LAPTOP:
+        - 450.0
+        - 750.0
+    PREMIUM:
+      share: 0.2
+      preferences:
+        LAPTOP: 3
+        CONSOLE: 2
+        PHONE: 1
+      willingness_to_pay:
+        LAPTOP:
+        - 800.0
+        - 1400.0
+        CONSOLE:
+        - 600.0
+        - 1000.0
+        PHONE:
+        - 400.0
+        - 650.0
+goods:
+  raw_materials:
+  - CHIP
+  - DISPLAY
+  - BATTERY
+  - CASING
+  finished_goods:
+  - PHONE
+  - LAPTOP
+  - TABLET
+  - SMARTWATCH
+  - CONSOLE
+  recipes:
+    RECIPE_PHONE:
+      output_good: PHONE
+      inputs:
+        CHIP: 1
+        DISPLAY: 1
+        BATTERY: 1
+        CASING: 1
+    RECIPE_LAPTOP:
+      output_good: LAPTOP
+      inputs:
+        CHIP: 2
+        DISPLAY: 1
+        BATTERY: 1
+        CASING: 1
+    RECIPE_TABLET:
+      output_good: TABLET
+      inputs:
+        CHIP: 1
+        DISPLAY: 1
+        BATTERY: 1
+    RECIPE_SMARTWATCH:
+      output_good: SMARTWATCH
+      inputs:
+        CHIP: 1
+        BATTERY: 1
+        CASING: 1
+    RECIPE_CONSOLE:
+      output_good: CONSOLE
+      inputs:
+        CHIP: 3
+        CASING: 2
+        BATTERY: 1
+agents:
+  directory: opponents
+  decide_timeout_ms: 100.0
+  observe_all_transactions: false
+output:
+  directory: ../outputs/arena/final_2
+  prefix: market
+  render_plots: false
+  progress_interval_turns: 1
+  dashboard: none
+  turn_delay_seconds: 0.0

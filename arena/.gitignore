@@ -1,0 +1,4 @@
+# per-attempt state of the practice day (reset by deleting these)
+.clock
+submissions/
+submissions.csv
