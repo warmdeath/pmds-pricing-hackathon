@@ -42,7 +42,7 @@ def finish(cfg, name, seeds):
     cfg["output"]["dashboard"] = "none"
     cfg["output"]["render_plots"] = False
     cfg["output"]["progress_interval_turns"] = 1
-    text = HEADER + f"# evaluation seeds: {seeds}\n" + yaml.safe_dump(cfg, sort_keys=False)
+    text = HEADER + f"# evaluation: seeds {seeds[0]}..{seeds[0]}+N-1, N = ARENA_SEEDS (default 8)\n" + yaml.safe_dump(cfg, sort_keys=False)
     (ROOT / "arena" / "configs" / f"{name}.yaml").write_text(text)
 
 

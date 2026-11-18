@@ -3,7 +3,7 @@
 #  Like the organizers' private scenarios, this file is meant to stay unseen.
 #  `arena/run.sh submit` plays it over several seeds.
 # =============================================================================
-# evaluation seeds: [1101, 1102, 1103]
+# evaluation: seeds 1101..1101+N-1, N = ARENA_SEEDS (default 8)
 turns: 40
 seed: 1101
 initial_state:
