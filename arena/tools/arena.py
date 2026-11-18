@@ -39,8 +39,15 @@ def main() -> int:
     dash.add_argument("--simulations", type=int, default=3)
     dash.add_argument("--seed", type=int)
     dash.add_argument("--max-workers", type=int)
+    dash.add_argument("--turns", type=int)
+
+    sub.add_parser("selftest", help="run the arena's own test suite")
 
     args = parser.parse_args()
+    if args.command == "selftest":
+        return subprocess.run([sys.executable, "-m", "unittest", "discover", "-s",
+                               str(ROOT / "arena" / "tests"), "-v"], cwd=ROOT,
+                              env=python_env()).returncode
     if args.command == "practice":
         from practice import run_practice
         return run_practice(args)
@@ -64,6 +71,8 @@ def main() -> int:
             command += ["--seed", str(args.seed)]
         if args.max_workers:
             command += ["--max-workers", str(args.max_workers)]
+        if args.turns:
+            command += ["--turns", str(args.turns)]
         code = subprocess.run(command, cwd=ROOT, env=python_env()).returncode
         print(f"mean-curve dashboards: {output}")
         return code

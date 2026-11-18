@@ -275,14 +275,19 @@ def _limit_cpu() -> None:
 
 def _smoke_test(bundle_dir: Path, agent_id: str) -> tuple[str, float, str]:
     """Import, construct and play three default-scenario turns with the real CLI."""
-    probe = subprocess.run(
-        [sys.executable, "-c", (
-            "import sys; from dme_simulator.agents.loader import load_agent_bundle_class as L;"
-            "print(L(sys.argv[1]).__name__)"
-        ), str(bundle_dir)],
-        cwd=bundle_dir, capture_output=True, text=True, timeout=WALL_SECONDS,
-        env=_env(), preexec_fn=_limit_cpu,
-    )
+    try:
+        probe = subprocess.run(
+            [sys.executable, "-c", (
+                "import sys; from dme_simulator.agents.loader import load_agent_bundle_class as L;"
+                "print(L(sys.argv[1]).__name__)"
+            ), str(bundle_dir)],
+            cwd=bundle_dir, capture_output=True, text=True, timeout=WALL_SECONDS,
+            env=_env(), preexec_fn=_limit_cpu,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise Rejected(
+            f"importing the agent exceeded the {WALL_SECONDS:.0f}-second wall-clock deadline"
+        ) from error
     if probe.returncode != 0:
         raise Rejected("agent could not be loaded:\n" + _tail(probe.stderr))
     class_name = probe.stdout.strip().splitlines()[-1]
