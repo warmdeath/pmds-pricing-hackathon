@@ -44,7 +44,7 @@ alternative use**, not at what you paid.
 = 300
 x 800 | the purchase price is sunk.
 ! Best alternative = resale 100 × 3.
-@num Same component, but it could replace a part you'd otherwise buy at €6 for another product. Relevant cost (€)?
+@num 100 units of a component bought at €8; resale value €3; it could also replace a part you'd otherwise buy at €6 for another product. Relevant cost of using them (€)?
 = 600
 ! Best alternative now 6 per unit.
 @mcq Stock with no other use and no resale value has an opportunity cost of…
@@ -66,7 +66,7 @@ opportunity cost of the capacity freed.
 @num Make: variable cost €9 per unit; allocated fixed overhead €4 (unavoidable). Buy: €11. Saving per unit from making (€)?
 = 2
 ! 11 − 9.
-@num Same, but freed capacity could earn €3 per unit elsewhere. Net advantage of BUYING per unit (€)?
+@num Make: variable cost €9 per unit; allocated fixed overhead €4 (unavoidable). Buy: €11. Freed capacity could earn €3 per unit elsewhere. Net advantage of BUYING per unit (€)?
 = 1
 ! Make costs 9 + 3 = 12 vs buy 11.
 @mcq In make-or-buy, allocated fixed costs that continue either way are…
@@ -88,7 +88,7 @@ rank; (4) fill demand in rank order until the resource runs out.
 @num 120 hours. X: CM €50, 5 h, demand 20. Y: CM €18, 1.5 h, demand 40. Maximum contribution (€)?
 = 1320
 ! Y €12/h first: 40 Y uses 60 h (€720); 60 h → 12 X (€600).
-@num Same, but demand for Y is 100. Maximum contribution (€)?
+@num 120 hours. X: CM €50, 5 h, demand 20. Y: CM €18, 1.5 h, demand 100. Maximum contribution (€)?
 = 1440
 ! 120 h / 1.5 = 80 Y × 18.
 @mcq A has the higher contribution per unit but uses much more of the scarce input. Rank by…
@@ -109,10 +109,10 @@ two products, check the **corner points** of the feasible region.
 > 1,500; B only: min(40,100)=40 → 1,600; both binding: x + 2y = 80, 2x + y =
 > 100 ⇒ x = 40, y = 20 → 1,200 + 800 = **2,000** (best).
 
-@num In the example, how much material is used at the optimum (kg)?
+@num A uses 1 kg of material and 2 h; B uses 2 kg and 1 h. 80 kg and 100 h available; CM A €30, B €40. The best mix is 40 A and 20 B. Material used at the optimum (kg)?
 = 80
 ! 40 + 2×20.
-@num Same resources, CM A = 30, B = 10. Best total contribution?
+@num A uses 1 kg of material and 2 h; B uses 2 kg and 1 h. 80 kg and 100 h available. CM A €30, B €10. Best total contribution (€)?
 = 1500
 ! A only (50 units, hours bind) = 1,500 beats the mixed corner 1,400.
 @mcq With two binding constraints, the optimum of a linear programme lies…
@@ -161,10 +161,10 @@ when one input changes, and which inputs matter most.
 @num Profit = (P − 20)·Q − 10,000, P = 30, Q = 1,500. Profit at base case (€)?
 = 5000
 ! 15,000 − 10,000.
-@num Same: price at which profit becomes zero (Q = 1,500)?
+@num Profit = (P − 20)·Q − 10,000 with Q = 1,500. Price at which profit becomes zero?
 = 26.67 ~0.01
 ! (P − 20)·1,500 = 10,000 ⇒ P = 26.67.
-@num Same: profit if Q falls 20 % (P = 30)? (€)
+@num Profit = (P − 20)·Q − 10,000, P = 30, base Q = 1,500. Profit if Q falls 20 % (€)?
 = 2000
 ! 10 × 1,200 − 10,000.
 

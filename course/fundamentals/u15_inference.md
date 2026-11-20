@@ -78,7 +78,7 @@ The SE is largest at p̂ = 0.5; to halve it, quadruple n.
 @num 50 of 200 customers churned. p̂?
 = 0.25 %
 ! 50/200.
-@num Same: standard error of p̂ (4 decimals)?
+@num 50 of 200 customers churned. Standard error of p̂ (4 decimals)?
 = 0.0306 ~0.0005
 ! √(0.25·0.75/200) = 0.0306.
 @num p̂ = 0.5, n = 400. SE?
@@ -101,7 +101,7 @@ in the strict frequentist sense, though that's the practical reading.
 @num x̄ = 80, σ = 20, n = 64, 95 %. Lower bound?
 = 75.1 ~0.01
 ! 80 − 1.96 × 2.5.
-@num Same: margin of error (half-width)?
+@num x̄ = 80, σ = 20, n = 64, 95 % confidence. Margin of error (half-width)?
 = 4.9 ~0.01
 ! 1.96 × 2.5.
 @mcq A 99 % interval compared with a 95 % interval from the same data is…
@@ -212,7 +212,7 @@ reject if z > 1.645.
 @num μ₀ = 50, x̄ = 48.5, σ = 6, n = 16. z statistic?
 = -1
 ! −1.5/1.5.
-@mcq In the previous question, two-sided α = 0.05: decision?
+@mcq H₀: μ = 50; x̄ = 48.5, σ = 6, n = 16, so z = −1. Two-sided test at α = 0.05: decision?
 + do not reject H₀ (|z| = 1 < 1.96)
 - reject H₀
 - accept H₁

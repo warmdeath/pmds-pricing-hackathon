@@ -40,6 +40,8 @@ PASS_SHARE = 0.75
 FINAL_QUESTIONS = 30
 FINAL_MINUTES = 90
 FINAL_PASS = 18
+DEPENDENT = re.compile(r"^(Same\b|Using the\b)|previous question|\b(table|entries|schedule|data) above\b|"
+                       r"\b(the|this) (lesson|example|case)\b|^In the (lesson|example)", re.I)
 
 
 @dataclass
@@ -437,6 +439,9 @@ def selftest_problems() -> tuple[list[str], dict]:
                 problems.append(f"{x.id} has {len(x.exercises)} exercises (< 3)")
             for fx in x.exercises:
                 n_ex += 1
+                # Questions are shuffled and reused alone (review, final): each must stand alone.
+                if DEPENDENT.search(fx.question):
+                    problems.append(f"{fx.id} refers to another question or the lesson text: {fx.question[:60]}")
                 if fx.kind == "num":
                     if fx.answer is None or not math.isfinite(fx.answer):
                         problems.append(f"{fx.id} has no numeric answer")

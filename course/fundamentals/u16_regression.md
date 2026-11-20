@@ -135,7 +135,7 @@ The line always passes through (x̄, ȳ).
 @num cov(x, y) = 30, var(x) = 10. Slope b?
 = 3
 ! 30/10.
-@num Same, x̄ = 4, ȳ = 20. Intercept a?
+@num Slope b = 3, x̄ = 4, ȳ = 20. Intercept a?
 = 8
 ! 20 − 3·4.
 @num r = 0.5, s_y = 8, s_x = 2. Slope?
@@ -154,7 +154,7 @@ The line always passes through (x̄, ȳ).
 @num ŷ = 900 − 30x. Predicted y at x = 25?
 = 150
 ! 900 − 750.
-@num Same model: predicted change in y when x rises by 2?
+@num ŷ = 900 − 30x. Predicted change in y when x rises by 2?
 = -60
 ! −30 × 2.
 @mcq Weight = −100 + 1.0 × height (cm). The intercept −100 at height 0…
@@ -201,7 +201,7 @@ typical size of errors; prediction intervals are wider than the line suggests.
 @num Sales = 500 − 20 × price, fitted on prices €5–€15. Prediction at price €12?
 = 260
 ! 500 − 240.
-@mcq Same model at price €30 predicts −100. This illustrates…
+@mcq Sales = 500 − 20 × price was fitted on prices €5–€15; at €30 it predicts −100 units. This illustrates…
 + the danger of extrapolation
 - negative demand exists
 - a good prediction
@@ -232,7 +232,7 @@ can change a coefficient a lot when variables are correlated.
 @num Sales = 1,000 − 25·P + 15·Pc. P = 20, Pc = 22. Predicted sales?
 = 830
 ! 1,000 − 500 + 330.
-@num Same model: effect of a €2 rise in the competitor's price?
+@num Sales = 1,000 − 25·P + 15·Pc. Effect on sales of a €2 rise in the competitor's price Pc?
 = 30
 ! 15 × 2.
 @mcq In multiple regression, b₁ measures the association of x₁ with y…
@@ -259,7 +259,7 @@ directly: b = −1.8 means a 1 % price rise goes with 1.8 % fewer units.
 @num ln(Q) = 6 − 2.2 ln(P). Elasticity?
 = -2.2
 ! The coefficient on ln(P).
-@num Same model: approximate % change in Q for a 5 % price rise?
+@num ln(Q) = 6 − 2.2 ln(P). Approximate % change in Q for a 5 % price rise?
 = -11 %
 ! −2.2 × 5.
 @num ln(wage) = 2 + 0.08 × years_of_education. Approximate % wage increase per extra year?

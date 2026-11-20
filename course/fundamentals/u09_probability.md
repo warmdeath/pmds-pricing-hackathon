@@ -88,13 +88,13 @@ read **joint**, **marginal** and **conditional** probabilities.
 - P(saw ad and bought) = 60/600 = 0.10 (joint)
 - P(bought | saw ad) = 60/200 = 0.30 (conditional: restrict to the row)
 
-@num Using the table: P(bought | no ad)?
+@num Saw ad: 60 bought, 140 didn't. No ad: 40 bought, 360 didn't. P(bought | no ad)?
 = 0.1 %
 ! 40/400.
-@num Using the table: P(saw ad | bought)?
+@num Saw ad: 60 bought, 140 didn't. No ad: 40 bought, 360 didn't. P(saw ad | bought)?
 = 0.6 %
 ! 60/100.
-@num Using the table: P(saw ad)?
+@num Saw ad: 60 bought, 140 didn't. No ad: 40 bought, 360 didn't. P(saw ad)?
 = 0.3333 ~0.001 %
 ! 200/600.
 
@@ -192,10 +192,10 @@ where P(A) comes from the law of total probability.
 > Only about 9 %! When the base rate is low, most alarms are false — the
 > **base-rate fallacy**.
 
-@num Using the example's numbers: P(flagged)?
+@num 1 % of products are defective. A test flags 95 % of defective items and 10 % of good ones. P(an item is flagged)?
 = 0.1085 ~0.0005 %
 ! 0.0095 + 0.099.
-@num Same setting from F9.7: P(lead came from referrals | converted)?
+@num 60 % of leads come from ads (5 % convert) and 40 % from referrals (15 % convert). P(lead came from referrals | converted)?
 = 0.6667 ~0.001 %
 ! 0.06/0.09.
 @num 5 % of customers are fraudulent. A filter flags 90 % of frauds and 2 % of honest customers. P(fraud | flagged)?

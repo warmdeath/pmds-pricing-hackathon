@@ -67,7 +67,7 @@ Forecast error eₜ = actual − forecast. Summaries:
 @num Errors −4, 6, −2. MAE?
 = 4
 ! (4 + 6 + 2)/3.
-@num Same errors: bias (mean error)?
+@num Forecast errors −4, 6, −2. Bias (mean error)?
 = 0
 ! (−4 + 6 − 2)/3.
 @num Actuals 50 and 200; forecasts 60 and 180. MAPE (%)?
@@ -121,7 +121,7 @@ Here, full price wins as long as its conversion is above 15/90 = 16.7 %.
 @num Option A: 40 % chance of €30 profit. Option B: 25 % chance of €60. Expected profit of B minus A (€)?
 = 3
 ! 15 − 12.
-@num In the lesson example, minimum full-price conversion at which full price still matches the discount (%)?
+@num Discounted offers convert 30 % of the time with €50 profit each; full-price offers earn €90 profit each. Minimum full-price conversion rate at which full price matches the discount (%)?
 = 16.67 % ~0.02
 ! 15/90.
 @mcq Expected-value decisions are most appropriate when…

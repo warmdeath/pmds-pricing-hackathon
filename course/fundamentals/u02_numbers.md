@@ -80,7 +80,7 @@ Central banks move rates in **basis points**: 1 bp = 0.01 pp. "+50 bp" = +0.5 pp
 = 1
 x 25 | that's the relative (percent) change.
 ! 5 − 4 = 1 pp.
-@num Same change (4 % → 5 %): relative change in percent?
+@num An interest rate rises from 4 % to 5 %. Relative change in percent?
 = 25 %
 x 1 | that's in percentage points.
 ! (5 − 4)/4 = 25 %.
@@ -328,7 +328,7 @@ Qd = 100 − 2P,   Qs = 20 + 2P,   equilibrium: Qd = Qs
 @num Qd = 120 − 3P and Qs = 20 + 2P. Equilibrium price?
 = 20
 ! 120 − 3P = 20 + 2P ⇒ 100 = 5P ⇒ P = 20.
-@num Same market: equilibrium quantity?
+@num Qd = 120 − 3P and Qs = 20 + 2P. Equilibrium quantity?
 = 60
 ! 120 − 3·20 = 60.
 @num 40 tickets were sold, some at €15 and some at €25, for €720. How many at €25?

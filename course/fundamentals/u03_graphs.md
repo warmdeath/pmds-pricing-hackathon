@@ -80,7 +80,7 @@ falls to zero), slope −2. Rearranged as a demand function: Q = 50 − 0.5P
 @num Inverse demand P = 90 − 3Q. At what price does quantity demanded fall to zero (choke price)?
 = 90
 ! Q = 0 ⇒ P = 90.
-@num Same demand P = 90 − 3Q. Quantity demanded at a price of zero?
+@num Inverse demand P = 90 − 3Q. Quantity demanded at a price of zero?
 = 30
 ! 0 = 90 − 3Q ⇒ Q = 30.
 @num Cost C = 5,000 + 12Q. Cost of 250 units?
@@ -262,10 +262,10 @@ Tables pack many numbers; read them systematically:
 @num Sales (€k): A 300 → 360, B 700 → 740. Growth of total sales (%)?
 = 10 %
 ! 1,000 → 1,100.
-@num Same table: share of A in total sales in the second year (%)?
+@num Sales (€k): A 300 → 360, B 700 → 740. Share of A in total sales in the second year (%)?
 = 32.73 % ~0.05
 ! 360/1,100 = 32.73 %.
-@num Same table: growth of B (%)?
+@num Sales (€k): A 300 → 360, B 700 → 740. Growth of B (%)?
 = 5.71 % ~0.02
 ! 40/700 = 5.71 %.
 

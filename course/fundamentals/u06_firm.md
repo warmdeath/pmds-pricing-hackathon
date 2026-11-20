@@ -18,7 +18,7 @@ Growth decomposition: %ΔR ≈ %ΔP + %ΔQ.
 @num 120 units at €45 and 80 units at €60. Total revenue (€)?
 = 10200
 ! 5,400 + 4,800.
-@num Same sales: average revenue per unit (€)?
+@num 120 units at €45 and 80 units at €60. Average revenue per unit (€)?
 = 51
 ! 10,200/200.
 @num Price +4 %, quantity +6 %. Approximate revenue growth (%)?
@@ -71,7 +71,7 @@ Decisions about **one more unit** use MC, not AC (F1.6).
 @num FC €8,000, v = €30. Average cost at Q = 400 (€)?
 = 50
 ! 8,000/400 + 30.
-@num Same firm: marginal cost of the 401st unit (€)?
+@num FC €8,000, variable cost €30 per unit (constant). Marginal cost of the 401st unit (€)?
 = 30
 x 50 | marginal cost excludes fixed costs already paid.
 ! Only the variable cost.
@@ -97,7 +97,7 @@ profit** (also minus overheads) and **net profit** (after interest and tax)
 @num P = €80, v = €50, FC = €12,000, Q = 600. Profit (€)?
 = 6000
 ! 30 × 600 − 12,000.
-@num Same firm at Q = 300. Profit (€)?
+@num P = €80, v = €50, FC = €12,000, Q = 300. Profit (€)?
 = -3000
 ! 9,000 − 12,000.
 @num Revenue €250,000, total costs €232,000. Profit as % of revenue?
@@ -152,7 +152,7 @@ still contributes, but not enough to cover the fixed costs.
 @num FC €36,000, P €60, v €36. Break-even quantity?
 = 1500
 ! 36,000/24.
-@num Same firm: units needed for €12,000 profit?
+@num FC €36,000, P €60, v €36. Units needed for €12,000 profit?
 = 2000
 ! 48,000/24.
 @num Expected sales 2,000, break-even 1,500. Margin of safety (%)?
@@ -173,7 +173,7 @@ increases in volume save a lot, later ones little.
 @num FC €50,000, v €10. Average cost at Q = 2,500 (€)?
 = 30
 ! 20 + 10.
-@num Same firm: by how many € does AC fall from Q = 1,000 to Q = 2,000?
+@num FC €50,000, v €10. By how many € does average cost fall from Q = 1,000 to Q = 2,000?
 = 25
 ! 60 − 35.
 @mcq Bulk discounts on inputs for large orders are a source of…
@@ -200,7 +200,7 @@ price − materials − shipping − payment fees − returns allowance = contri
 @num Price €60; materials €25; shipping €8; payment fee 2 % of price; returns allowance €3. Contribution per order (€)?
 = 22.8
 ! 60 − 25 − 8 − 1.2 − 3.
-@num Same business: fixed costs €45,600 per month. Orders needed to break even?
+@num Contribution per order is €22.80 and fixed costs are €45,600 per month. Orders needed to break even?
 = 2000
 ! 45,600/22.8.
 @mcq A start-up with negative contribution per unit…
@@ -256,7 +256,7 @@ rank by: contribution per unit of the scarce resource
 = 900
 x 600 | rank by contribution per unit of the scarce input: B earns 15 per unit, A 10.
 ! B: 60 × 15 = 900.
-@num Same, but demand for B is at most 20 units. Maximum contribution (€)?
+@num A scarce input: 60 units available. Product A earns €40 and uses 4 units; product B earns €15 and uses 1 unit; demand for B is at most 20 units. Maximum contribution (€)?
 = 700
 ! 20 B (20 inputs, €300) + 10 A (40 inputs, €400).
 @mcq With a scarce input, products should be ranked by…
@@ -284,10 +284,10 @@ Many profitable firms fail because they run out of cash.
 @num Buy materials €8,000 (paid), sell 60 % of the resulting goods for €9,000 (paid). Change in cash (€)?
 = 1000
 ! −8,000 + 9,000.
-@num Same: profit on the goods sold (€)?
+@num Buy materials €8,000 (paid), sell 60 % of the resulting goods for €9,000 (paid). Profit on the goods sold (€)?
 = 4200
 ! 9,000 − 0.6 × 8,000.
-@num Same: value of materials still sitting in stock (€)?
+@num Buy materials €8,000 (paid), sell 60 % of the resulting goods for €9,000 (paid). Value of materials still sitting in stock (€)?
 = 3200
 ! 0.4 × 8,000.
 
@@ -309,9 +309,9 @@ units sold stay the same, profit can fall because the *mix* changed.
 @num Mix 60 % A (CM €20) and 40 % B (CM €45). Weighted contribution margin (€)?
 = 30
 ! 12 + 18.
-@num Same mix, fixed costs €48,000. Total break-even units?
+@num Mix 60 % A (CM €20) and 40 % B (CM €45); fixed costs €48,000. Total break-even units?
 = 1600
 ! 48,000/30.
-@num Same: how many of those are B?
+@num Mix 60 % A (CM €20) and 40 % B (CM €45); fixed costs €48,000. How many of the break-even units are B?
 = 640
 ! 0.4 × 1,600.

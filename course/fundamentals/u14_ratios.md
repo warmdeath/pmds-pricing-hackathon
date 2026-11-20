@@ -70,7 +70,7 @@ quickly — or at all.
 @num Current assets 450, current liabilities 300. Current ratio?
 = 1.5
 ! 450/300.
-@num Same, inventory 270. Quick ratio?
+@num Current assets 450 (of which inventory 270), current liabilities 300. Quick ratio?
 = 0.6
 ! 180/300.
 @mcq A firm with current ratio 2.0 but quick ratio 0.3 depends heavily on…
@@ -94,7 +94,7 @@ asset turnover = revenue / total assets
 @num COGS 1,200, average inventory 300. Inventory turnover?
 = 4
 ! 1,200/300.
-@num Same: days of inventory (365-day year)?
+@num COGS 1,200, average inventory 300. Days of inventory (365-day year)?
 = 91.25
 ! 365/4.
 @num Receivables 90, revenue 1,095. DSO (days)?

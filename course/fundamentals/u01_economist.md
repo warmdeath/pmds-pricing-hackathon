@@ -133,7 +133,7 @@ elsewhere ("normal profit").
 @num Revenue €120,000; explicit costs €90,000. Accounting profit (€)?
 = 30000
 ! 120,000 − 90,000.
-@num Same business; the owner could earn €35,000 elsewhere. Economic profit (€)?
+@num A business has revenue €120,000 and explicit costs €90,000; the owner could earn €35,000 working elsewhere. Economic profit (€)?
 = -5000
 x 30000 | that's accounting profit; subtract the implicit cost.
 ! 30,000 − 35,000 = −5,000: the owner would be better off working elsewhere.

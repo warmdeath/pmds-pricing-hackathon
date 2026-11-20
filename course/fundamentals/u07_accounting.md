@@ -51,7 +51,7 @@ it can never be sold, it loses its value.
 @num Cash €7,000, inventory €15,000, receivables €4,000, equipment €24,000. Total assets (€)?
 = 50000
 ! Sum.
-@num Same firm: current assets (€)?
+@num Cash €7,000, inventory €15,000, receivables €4,000, equipment €24,000. Current assets (€)?
 = 26000
 ! 7,000 + 15,000 + 4,000.
 @mcq Which is NOT an asset?
@@ -77,7 +77,7 @@ Liabilities are claims of **outsiders** on the firm's assets.
 @num Payables €6,000, short-term loan €4,000, 5-year bank loan €20,000. Current liabilities (€)?
 = 10000
 ! 6,000 + 4,000.
-@num Same: total liabilities (€)?
+@num Payables €6,000, short-term loan €4,000, 5-year bank loan €20,000. Total liabilities (€)?
 = 30000
 ! 10,000 + 20,000.
 @mcq Buying goods from a supplier who will be paid in 30 days creates…
@@ -160,7 +160,7 @@ After these: assets 24,300 = liabilities 4,000 + equity 20,300.
 @num Start: cash 10,000, equity 10,000. Buy stock for 3,000 cash, then sell all of it for 5,000 cash. Cash now (€)?
 = 12000
 ! 10,000 − 3,000 + 5,000.
-@num Same: equity now (€)?
+@num Start: cash 10,000, equity 10,000. Buy stock for 3,000 cash, then sell all of it for 5,000 cash. Equity now (€)?
 = 12000
 ! 10,000 + profit 2,000.
 @mcq Selling goods on credit (customer pays next month) increases…
@@ -281,10 +281,10 @@ Mar 9  Dr Cash             3,000
 A sale records two things: the revenue (at selling price) and the cost of the
 goods leaving inventory (at cost).
 
-@num Using the entries above, inventory balance after Mar 9 (€)?
+@num Mar 3: buy components for €2,400 cash (inventory). Mar 9: sell 10 units for €3,000; their cost was €1,600. Inventory balance after Mar 9 (€)?
 = 800
 ! 2,400 − 1,600.
-@num Same entries: gross profit on the sale (€)?
+@num Mar 3: buy components for €2,400 cash. Mar 9: sell 10 units for €3,000; their cost was €1,600. Gross profit on the sale (€)?
 = 1400
 ! 3,000 − 1,600.
 @mcq When goods costing 1,600 are sold for 3,000, inventory is reduced by…
@@ -344,6 +344,6 @@ them.
 = 8000
 x 6000 | accrual counts the whole sale and the June wages, regardless of payment dates.
 ! 12,000 − 4,000.
-@num Same firm: June net cash flow (€)?
+@num In June a firm delivers goods for €12,000 (half paid in June, half in July) and pays June's €4,000 of wages in July. June net cash flow (€)?
 = 6000
 ! Only the half paid in June; wages paid in July.

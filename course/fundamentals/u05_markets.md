@@ -81,7 +81,7 @@ The buyer's gain = WTP − price (consumer surplus, F5.11).
 @num WTPs: 90, 75, 60, 60, 45, 30. How many buy at a price of 60?
 = 4
 ! Those with WTP ≥ 60: 90, 75, 60, 60.
-@num Same buyers: how many buy at 50?
+@num WTPs: 90, 75, 60, 60, 45, 30. How many buy at a price of 50?
 = 4
 ! 90, 75, 60, 60.
 @num A buyer with WTP €120 pays €95. Her gain (consumer surplus, €)?
@@ -144,7 +144,7 @@ sellers, expected prices, taxes and subsidies, disruptions.
 @num Supply Qs = −20 + 4P. Quantity supplied at P = 15?
 = 40
 ! −20 + 60.
-@num Same supply: lowest price at which anything is supplied?
+@num Supply Qs = −20 + 4P. Lowest price at which anything is supplied?
 = 5
 ! −20 + 4P = 0 ⇒ P = 5.
 
@@ -162,10 +162,10 @@ Linear case: Qd = a − bP, Qs = c + dP ⇒ P* = (a − c)/(b + d).
 @num Qd = 300 − 5P, Qs = 60 + 3P. Equilibrium price?
 = 30
 ! 240 = 8P.
-@num Same market: equilibrium quantity?
+@num Qd = 300 − 5P, Qs = 60 + 3P. Equilibrium quantity?
 = 150
 ! 300 − 150.
-@num Same market at P = 40: surplus (Qs − Qd)?
+@num Qd = 300 − 5P, Qs = 60 + 3P. At P = 40, surplus (Qs − Qd)?
 = 80
 ! Qs = 180, Qd = 100.
 
@@ -245,7 +245,7 @@ of one product can steal sales from another of their own products
 @num Price of B rises 8 %, demand for A falls 4 %. Cross-price elasticity?
 = -0.5
 ! −4/8.
-@mcq The pair in the previous question are…
+@mcq The price of B rises 8 % and demand for A falls 4 % (cross-price elasticity −0.5). A and B are…
 + complements
 - substitutes | positive would mean substitutes.
 - unrelated

@@ -12,13 +12,13 @@ weighted contribution per item = 0.7 × 1.50 + 0.3 × 1.50 = €1.50; break-even
 Questions a manager asks next: is 154 items/day realistic (data on foot
 traffic)? How sensitive is profit to the mix and to the coffee price?
 
-@num Break-even items per month?
+@num Café: fixed costs €6,000/month; every item (coffee or pastry) contributes €1.50. Break-even items per month?
 = 4000
 ! 6,000/1.50.
-@num Expected sales 5,200 items/month. Monthly profit (€)?
+@num Café: fixed costs €6,000/month; each item contributes €1.50; expected sales 5,200 items/month. Monthly profit (€)?
 = 1800
 ! 1,200 × 1.50.
-@num Margin of safety at 5,200 items (%)?
+@num Café: break-even 4,000 items/month; expected sales 5,200 items. Margin of safety (%)?
 = 23.08 % ~0.05
 ! 1,200/5,200.
 
@@ -33,13 +33,13 @@ Arc elasticity between €40 and €45 = (−300/1,850)/(5/42.5) = −1.38 (elas
 yet raising the price still increased profit — because costs fall with fewer
 units. Revenue and profit are different objectives.
 
-@num Profit at €45 (€)?
+@num Gadget: variable cost €22, fixed costs €20,000; at €45 the firm sells 1,700 units. Profit at €45 (€)?
 = 19100
 ! 23 × 1,700 − 20,000.
-@num Revenue at €40 minus revenue at €45 (€)?
+@num At €40 a gadget sells 2,000 units; at €45 it sells 1,700. Revenue at €40 minus revenue at €45 (€)?
 = 3500
 ! 80,000 − 76,500.
-@num Arc elasticity between €45 and €50?
+@num At €45 a gadget sells 1,700 units; at €50 it sells 1,300. Arc (midpoint) elasticity between the two prices?
 = -2.53 ~0.01
 ! (−400/1,500)/(5/47.5) = −0.2667/0.1053 = −2.53.
 
@@ -54,13 +54,13 @@ cost €30. A retailer offers to buy 3,000 units at €38.
 - Net: **+€4,000** — before considering whether regular customers will demand
   the lower price too.
 
-@num Net gain from accepting (€)?
+@num Factory: capacity 10,000 units, using 8,000; regular price €50, variable cost €30. A one-off order of 3,000 units at €38 would displace 1,000 regular sales. Net gain from accepting (€)?
 = 4000
 ! 24,000 − 20,000.
-@num If the retailer offered only €35, net gain (€)?
+@num Factory: capacity 10,000 units, using 8,000; regular price €50, variable cost €30. A one-off order of 3,000 units at €35 would displace 1,000 regular sales. Net gain from accepting (€)?
 = -5000
 ! 5 × 3,000 − 20,000.
-@num Minimum price per unit at which the 3,000-unit order breaks even (€)?
+@num Capacity 10,000, using 8,000; regular price €50, variable cost €30. Minimum price per unit at which a 3,000-unit one-off order breaks even (€)?
 = 36.67 ~0.01
 ! 30 + 20,000/3,000.
 
@@ -75,13 +75,13 @@ break-even in month 6. Cumulative burn until then ≈ 15,000 + 12,500 + 9,750 +
 
 Profit can be the right idea and the firm can still die if cash runs out first.
 
-@num Units needed per month to break even?
+@num Start-up: fixed costs €40,000/month, contribution €50 per unit. Units needed per month to break even?
 = 800
 ! 40,000/50.
-@num Month-1 net cash flow (€)?
+@num Start-up: fixed costs €40,000/month, contribution €50 per unit, 500 units sold in month 1. Month-1 net cash flow (€)?
 = -15000
 ! 500 × 50 − 40,000.
-@num If growth stopped at 500 units, months of runway with €180,000?
+@num Start-up with €180,000 cash loses €15,000 a month (500 units × €50 − €40,000). Months of runway?
 = 12
 ! 180,000/15,000.
 
@@ -95,13 +95,13 @@ inventory 500; receivables 300; payables 200; total assets 2,500; equity 1,000.
 
 Story: thin margins and a lot of stock tied up — X may be forced to discount.
 
-@num Net profit (€)?
+@num Revenue 2,000; COGS 1,400; opex 400; interest 50; tax 25 %. Net profit (€)?
 = 112.5
 ! (200 − 50) × 0.75.
-@num DIO (days)?
+@num Inventory 500, COGS 1,400. Days of inventory outstanding (365-day year)?
 = 130.36 ~0.05
 ! 500/1,400 × 365.
-@num ROA on net profit (%)?
+@num Net profit 112.5, total assets 2,500. ROA on net profit (%)?
 = 4.5 %
 ! 112.5/2,500.
 
@@ -115,13 +115,13 @@ NPV = −60,000 + 18,000 × annuity factor(8 %, 5) = −60,000 + 18,000 × 3.992
 Depreciation (straight-line) is €12,000/year: it affects accounting profit, not
 the cash savings — NPV uses cash flows.
 
-@num NPV (€, nearest unit)?
+@num A machine costs €60,000 and saves €18,000 a year for 5 years; cost of capital 8 %. NPV (€, nearest unit)?
 = 11869 ~2
 ! 18,000 × 3.99271 − 60,000.
-@num Payback (years)?
+@num A machine costs €60,000 and saves €18,000 a year. Payback (years)?
 = 3.33 ~0.01
 ! 60,000/18,000.
-@num Annual straight-line depreciation (€)?
+@num A machine costs €60,000, 5-year life, no residual value. Annual straight-line depreciation (€)?
 = 12000
 ! 60,000/5.
 
@@ -134,13 +134,13 @@ Loan payment = 30,000 × 0.06/(1 − 1.06⁻³) = €11,223.29; PV of loan payme
 cheaper by about €740 in today's money (ignoring maintenance, taxes and residual
 value).
 
-@num Annual loan payment (€)?
+@num Borrow €30,000 at 6 % for 3 years, equal annual payments. Annual payment (€)?
 = 11223.29 ~0.05
 ! 30,000 × 0.06/(1 − 1.06⁻³).
-@num PV of the lease payments at 6 % (€)?
+@num Lease: €11,500 at the end of each year for 3 years. PV at 6 % (€)?
 = 30739.6 ~2
 ! 11,500 × 2.67301.
-@num Total interest paid on the loan (€)?
+@num €30,000 loan at 6 % for 3 years, annual payments of €11,223.29. Total interest paid (€)?
 = 3669.87 ~0.2
 ! 3 × 11,223.29 − 30,000.
 
@@ -154,13 +154,13 @@ z ≈ 0.18 → order ≈ 500 + 0.18 × 100 = **518**.
 If unsold jackets were worth nothing (c_o = 60): ratio 0.4, z ≈ −0.25 → order
 ≈ 475. The value of leftovers changes the optimal stock.
 
-@num Critical ratio with outlet value €30?
+@num Jackets: cost €60, price €100, unsold ones sold to an outlet at €30. Newsvendor critical ratio?
 = 0.5714 ~0.001 %
 ! 40/70.
-@num Critical ratio if leftovers are worth €0?
+@num Jackets: cost €60, price €100, unsold ones worth €0. Newsvendor critical ratio?
 = 0.4 %
 ! 40/100.
-@num With critical ratio 0.5 the optimal order equals…
+@num Demand ~ N(500, 100²) and the critical ratio is 0.5. Optimal order quantity?
 = 500
 ! The median of N(500, 100²).
 
@@ -174,13 +174,13 @@ the preceding period (seasonality).
   convincing evidence.
 - Raw comparison (214 vs 200, z = 2.33) would have overstated the effect.
 
-@num z statistic after seasonal adjustment?
+@num Daily orders: SD 30; 25 campaign days averaged 214 vs a seasonally expected 206. z statistic?
 = 1.33 ~0.01
 ! 8/6.
-@num z without the seasonal adjustment?
+@num Daily orders: SD 30; 25 campaign days averaged 214 vs a pre-campaign average of 200. z statistic?
 = 2.33 ~0.01
 ! 14/6.
-@mcq The main lesson of this case is…
+@mcq Orders rose from 200 to 214 a day during a campaign, but the same weeks last year also rose about 3 %. The main lesson is…
 + compare with the right baseline (seasonality) before judging
 - campaigns never work
 - z-tests are useless
@@ -198,13 +198,13 @@ loss happens only if both fail (and then costs the same).
 - Dual sourcing saves €5,500 per quarter in expectation — **if** failures are
   independent. A common cause (same region, same port) breaks the calculation.
 
-@num Expected loss per quarter with one supplier (€)?
+@num One supplier, 5 % chance of a disruption per quarter, each costing €200,000. Expected loss per quarter (€)?
 = 10000
 ! 0.05 × 200,000.
-@num Expected cost with two suppliers including the extra €4,000 (€)?
+@num Two independent suppliers, each 5 % likely to fail per quarter; a loss of €200,000 happens only if both fail; the second supplier costs €4,000 a quarter. Expected cost per quarter (€)?
 = 4500
 ! 0.0025 × 200,000 + 4,000.
-@num P(at least one disruption in 4 quarters) with one supplier (%)?
+@num A supplier fails with probability 5 % each quarter, independently. P(at least one disruption in 4 quarters) (%)?
 = 18.55 % ~0.05
 ! 1 − 0.95⁴.
 
@@ -220,13 +220,13 @@ With variable cost €6: profit (P − 6)(155 − 5.5P) is maximised where
 155 − 11P + 33 = 0 ⇒ P ≈ €17.09 — inside the tested range (€10–€18), so the
 linear fit is a reasonable guide there; outside it would be extrapolation.
 
-@num Slope of the fitted demand line?
+@num Price tests (price €, units): (10, 100), (12, 90), (14, 76), (16, 68), (18, 56). Least-squares slope of units on price?
 = -5.5
 ! −220/40.
-@num Predicted units at €15?
+@num Fitted demand Q̂ = 155 − 5.5P. Predicted units at €15?
 = 72.5 ~0.05
 ! 155 − 82.5.
-@num Profit-maximising price from the fitted line (€)?
+@num Fitted demand Q̂ = 155 − 5.5P, variable cost €6. Profit-maximising price (€)?
 = 17.09 ~0.01
 ! (155 + 33)/11 = 17.09.
 

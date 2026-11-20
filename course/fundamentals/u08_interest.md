@@ -249,7 +249,7 @@ For monthly payments use r/12 and n in months.
 @num Loan €20,000 at 5 % for 4 years, annual payments. Payment (€)?
 = 5640.24 ~0.05
 ! 20,000 × 0.05 / (1 − 1.05⁻⁴) = 5,640.24.
-@num Same loan: total interest paid over the life (€)?
+@num Loan €20,000 at 5 % for 4 years, equal annual payments of €5,640.24. Total interest paid over the life (€)?
 = 2560.95 ~0.2
 ! 4 × 5,640.24 − 20,000.
 @mcq Doubling a loan's length (same rate) makes each payment…
@@ -269,7 +269,7 @@ balance. Early payments are mostly interest; later ones mostly principal.
 | 1 | 10,000.00 | 600.00 | 2,373.96 | 1,773.96 | 8,226.04 |
 | 2 | 8,226.04 | 493.56 | 2,373.96 | 1,880.40 | 6,345.64 |
 
-@num Using the schedule above: interest in year 3 (€)?
+@num A €10,000 loan at 6 % has a balance of €6,345.64 after two annual payments. Interest charged in year 3 (€)?
 = 380.74 ~0.02
 ! 6,345.64 × 0.06.
 @num Loan €50,000 at 4 %, annual payment €11,231.36. Principal repaid in year 1 (€)?

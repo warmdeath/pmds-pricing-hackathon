@@ -51,10 +51,10 @@ days sold fewer than 20?" → 60 %.
 @num In a sample of 40 customers, 14 chose product A. Relative frequency of A?
 = 0.35 %
 ! 14/40.
-@num Using the table above (30 days), on how many days were sales at least 20?
+@num Daily sales over 30 days: 0–9 units on 6 days, 10–19 on 12 days, 20–29 on 9 days, 30–39 on 3 days. On how many days were sales at least 20?
 = 12
 ! 9 + 3.
-@num Same table: cumulative relative frequency up to 29 units (as a decimal)?
+@num Daily sales over 30 days: 0–9 units on 6 days, 10–19 on 12 days, 20–29 on 9 days, 30–39 on 3 days. Cumulative relative frequency up to 29 units (as a decimal)?
 = 0.9 %
 ! 0.2 + 0.4 + 0.3.
 
@@ -196,10 +196,10 @@ for 95 % of orders".
 @num Data 1, 3, 4, 6, 9, 11, 14, 20. Q1 (median of the lower half)?
 = 3.5
 ! Lower half 1,3,4,6 → (3 + 4)/2.
-@num Same data: Q3?
+@num Data 1, 3, 4, 6, 9, 11, 14, 20. Q3 (median of the upper half)?
 = 12.5
 ! Upper half 9,11,14,20 → (11 + 14)/2.
-@num Same data: IQR?
+@num Data 1, 3, 4, 6, 9, 11, 14, 20. Interquartile range (Q3 − Q1, using medians of the halves)?
 = 9
 ! 12.5 − 3.5.
 @mcq "95 % of orders are delivered within 3 days" describes…
@@ -228,7 +228,7 @@ important (a huge order). Never delete them blindly — investigate.
 @num Q1 = 40, Q3 = 60. Upper fence for outliers (Q3 + 1.5·IQR)?
 = 90
 ! IQR 20; 60 + 30.
-@num Same data: lower fence?
+@num Q1 = 40, Q3 = 60. Lower fence for outliers (Q1 − 1.5·IQR)?
 = 10
 ! 40 − 30.
 @mcq An outlier should be…

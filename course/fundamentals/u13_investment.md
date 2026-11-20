@@ -151,7 +151,7 @@ The **risk premium** = expected return − risk-free rate. The **Sharpe ratio**
 @num Returns −10 % or +30 % with equal probability. Expected return (%)?
 = 10 %
 ! (−10 + 30)/2.
-@num Same returns: standard deviation (%)?
+@num Returns −10 % or +30 % with equal probability. Standard deviation (%)?
 = 20 % ~0.05
 ! Deviations ±20.
 
@@ -173,7 +173,7 @@ w and 1 − w:
 @num σ₁ = σ₂ = 30 %, ρ = 0, 50/50. Portfolio σ (%)?
 = 21.21 % ~0.05
 ! √(0.25·0.09·2) = 0.2121.
-@num Same assets with ρ = 1. Portfolio σ (%)?
+@num σ₁ = σ₂ = 30 %, ρ = 1, 50/50. Portfolio σ (%)?
 = 30 %
 ! No diversification at ρ = 1.
 @mcq Which risk can diversification remove?
@@ -197,7 +197,7 @@ Too much debt raises the risk of insolvency.
 @num Assets €200 earn 8 %; debt €100 at 5 %; no taxes. ROE (%)?
 = 11 %
 ! (16 − 5)/100.
-@num Same firm if assets earn only 3 %. ROE (%)?
+@num Assets €200 earn 3 %; debt €100 at 5 %; no taxes. ROE (%)?
 = 1 %
 ! (6 − 5)/100.
 @num Debt €60, equity €40. Debt-to-equity ratio?

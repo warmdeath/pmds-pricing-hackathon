@@ -84,7 +84,7 @@ Revenue
 @num Revenue 800, COGS 480, operating expenses 200, interest 20, tax rate 25 %. Net profit?
 = 75
 ! EBIT 120, PBT 100, tax 25.
-@num Same company: gross margin (%)?
+@num Revenue 800, COGS 480. Gross margin (%)?
 = 40 %
 ! 320/800.
 @num EBIT 150, depreciation 40. EBITDA?
@@ -107,7 +107,7 @@ Revenue
 = 2800
 x 1000 | match costs to the units SOLD; unsold units stay in inventory.
 ! 7,000 − 4,200.
-@num Same: value of ending inventory (€)?
+@num Bought 500 units at €12, sold 350 at €20. Value of ending inventory (€)?
 = 1800
 ! 150 × 12.
 @mcq A customer pays in advance for goods delivered next quarter. This quarter the firm records…
@@ -134,7 +134,7 @@ Depreciation is a **non-cash** expense: the cash left when the asset was bought.
 @num Van €30,000, residual €6,000, life 4 years. Annual straight-line depreciation (€)?
 = 6000
 ! 24,000/4.
-@num Same van: book value after 3 years (€)?
+@num Van €30,000, residual €6,000, life 4 years, straight-line. Book value after 3 years (€)?
 = 12000
 ! 30,000 − 18,000.
 @mcq Depreciation reduces profit but…
@@ -161,10 +161,10 @@ With rising prices FIFO gives lower COGS and higher profit.
 @num Buy 50 @ €8 then 50 @ €12; sell 70. COGS under FIFO (€)?
 = 640
 ! 50×8 + 20×12.
-@num Same purchases and sales: COGS under weighted average (€)?
+@num Buy 50 @ €8 then 50 @ €12; sell 70. COGS under weighted average (€)?
 = 700
 ! average 10 × 70.
-@num Same: ending inventory under FIFO (€)?
+@num Buy 50 @ €8 then 50 @ €12; sell 70. Ending inventory under FIFO (€)?
 = 360
 ! 30 × 12.
 

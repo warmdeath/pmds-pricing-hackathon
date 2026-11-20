@@ -12,7 +12,7 @@ daily demand, number of defective units, profit of a project.
 > **Example.** Daily orders X: P(0) = 0.1, P(1) = 0.3, P(2) = 0.4, P(3) = 0.2.
 > P(X ≥ 2) = 0.6.
 
-@num Using the example: P(X ≤ 1)?
+@num Daily orders X: P(0) = 0.1, P(1) = 0.3, P(2) = 0.4, P(3) = 0.2. P(X ≤ 1)?
 = 0.4 %
 ! 0.1 + 0.3.
 @num P(X=0)=0.2, P(X=1)=0.5, P(X=2)=k. What is k?
@@ -288,9 +288,9 @@ be analysed with normal tables (unit F15).
 @num Each order: mean €50, SD €20. Total of 100 independent orders: mean (€)?
 = 5000
 ! 100 × 50.
-@num Same: SD of the total (€)?
+@num Each order: mean €50, SD €20. SD of the total of 100 independent orders (€)?
 = 200
 ! √100 × 20.
-@num Same: P(total > 5,400)? (use Φ(2) = 0.9772)
+@num Each order: mean €50, SD €20. Total of 100 independent orders: P(total > 5,400)? (use Φ(2) = 0.9772)
 = 0.0228 ~0.0005 %
 ! z = 400/200 = 2.
