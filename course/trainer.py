@@ -22,6 +22,7 @@
     course/run.sh map             where each concept appears in the simulator
     course/run.sh progress        your stats
     course/run.sh selftest        integrity checks of the course content
+    course/run.sh sync [FILE]     two-way sync with the browser version (see README)
 """
 
 from __future__ import annotations
@@ -46,6 +47,7 @@ from rich.panel import Panel  # noqa: E402
 from rich.table import Table  # noqa: E402
 
 import fundamentals as F  # noqa: E402
+import progress  # noqa: E402
 from fgenerators import FGENERATORS  # noqa: E402
 from generators import GENERATORS, Exercise  # noqa: E402
 from glossary import GLOSSARY  # noqa: E402
@@ -54,7 +56,7 @@ from simmap import SIM_MAP  # noqa: E402
 from syllabus import MODULES, lesson_by_id, all_lessons  # noqa: E402
 
 console = Console(highlight=False)
-STATE_FILE = Path(os.environ.get("COURSE_STATE", HERE / ".progress.json"))
+STATE_FILE = progress.STATE_FILE
 LEITNER_DAYS = {1: 0, 2: 1, 3: 3, 4: 7, 5: 16}
 
 
@@ -63,17 +65,15 @@ LEITNER_DAYS = {1: 0, 2: 1, 3: 3, 4: 7, 5: 16}
 # =============================================================================
 
 def load_state() -> dict:
-    if STATE_FILE.exists():
-        try:
-            return json.loads(STATE_FILE.read_text())
-        except json.JSONDecodeError:
-            pass
-    return {"read": {}, "stats": {}, "cards": {}, "exams": [],
-            "fund": {"passed": {}, "finals": [], "final_passed": False}}
+    return progress.read_file(STATE_FILE)
 
 
 def save_state(state: dict) -> None:
-    STATE_FILE.write_text(json.dumps(state, indent=1))
+    """Merge with the file (the local browser version may have written to it), then
+    update `state` in place so the running session sees the browser's progress too."""
+    merged = progress.save(state, STATE_FILE)
+    state.clear()
+    state.update(merged)
 
 
 def record(state: dict, lesson_id: str, card_id: str, correct: bool) -> None:
@@ -86,6 +86,7 @@ def record(state: dict, lesson_id: str, card_id: str, correct: bool) -> None:
         card["box"] = 1
     card["due"] = (date.today() + timedelta(days=LEITNER_DAYS[card["box"]])).isoformat()
     card["lesson"] = lesson_id
+    card["t"] = progress.now_ms()
     state["cards"][card_id] = card
     save_state(state)
 
@@ -583,6 +584,42 @@ def cmd_selftest() -> int:
     return 0
 
 
+def cmd_sync(path: str | None) -> int:
+    """Two-way bridge with the published page: merge a progress file saved from the
+    browser into course/.progress.json, then write the merged result back as a file
+    the browser can load."""
+    candidates = [Path(path)] if path else progress.find_exports()
+    local = progress.read_file(STATE_FILE)
+    before = len(local["fund"]["passed"])
+    if candidates and candidates[0].exists():
+        src = candidates[0]
+        try:
+            incoming = json.loads(src.read_text())
+        except (OSError, json.JSONDecodeError) as error:
+            console.print(f"[red]can't read {src}: {error}[/]")
+            return 1
+        merged = progress.merge(local, incoming)
+        console.print(f"[green]merged[/] {src}")
+    else:
+        merged = local
+        where = ", ".join(str(d) for d in progress.download_dirs()) or "(no Downloads folder found)"
+        console.print("no progress file from the browser found in " + where +
+                      ". In the page: Progress → Save progress file. Then run this again,"
+                      " or pass the file's path.")
+    merged["updated"] = progress.now_ms()
+    progress.write_file(merged, STATE_FILE)
+    console.print(f"terminal progress: {len(merged['fund']['passed'])}/{len(F.lessons())} Fundamentals lessons "
+                  f"passed (+{len(merged['fund']['passed']) - before} from the browser), "
+                  f"{len(merged['cards'])} review cards, final "
+                  + ("passed" if merged["fund"]["final_passed"] else "not yet passed"))
+    targets = progress.download_dirs() or [STATE_FILE.parent]
+    out = targets[-1] / progress.EXPORT_NAME
+    progress.write_file(merged, out)
+    console.print(f"wrote {out}\n→ in the page: Progress → Load progress file, and pick it to send the "
+                  "terminal's progress to the browser.")
+    return 0
+
+
 def _lesson_key(lid: str):
     a, b = lid.split(".")
     return int(a), int(b)
@@ -727,6 +764,8 @@ def main() -> int:
     sub.add_parser("map")
     sub.add_parser("progress")
     sub.add_parser("selftest")
+    p = sub.add_parser("sync", help="two-way sync with the browser version via a progress file")
+    p.add_argument("file", nargs="?")
     args = parser.parse_args()
 
     state = load_state()
@@ -771,6 +810,8 @@ def main() -> int:
             cmd_progress(state)
         elif args.cmd == "selftest":
             return cmd_selftest()
+        elif args.cmd == "sync":
+            return cmd_sync(args.file)
     except Quit:
         pass
     return 0

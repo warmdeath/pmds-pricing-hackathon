@@ -22,19 +22,40 @@ diversification, newsvendor). It applies the same rules: lessons unlock in order
 mastery checks need at least 75 %, and the Fundamentals final unlocks the general
 course.
 
-- **Published page** (laptop and phone):
-  https://claude.ai/artifact/Fy1XmEDNyKsrTZhTrzEcKG. It is private to your account.
-  Progress is saved there and syncs between devices; on the phone, use
-  **Review** for 5-minute sessions.
-- **Local** (offline, laptop only): run the command below and open
-  http://localhost:8765. Progress is then stored in that browser only.
+### Where progress lives, and how the versions sync
+
+| version | progress is saved in | stays in step with |
+| --- | --- | --- |
+| Published page — https://claude.ai/artifact/Fy1XmEDNyKsrTZhTrzEcKG | your claude.ai account (private to you) | every device where you open it signed in, automatically |
+| Local page — `course/run.sh web`, then http://localhost:8765 | `course/.progress.json` | the terminal trainer, **live** (same file) |
+| Terminal — `course/run.sh` | `course/.progress.json` | the local page, live; the published page via `sync` |
+
+The published page can't reach files on your laptop, and the terminal can't
+reach claude.ai, so the bridge between them is one click plus one command:
+
+- **Browser → terminal:** on the published page, Progress → **Save progress
+  file** (it goes to Downloads), then run the command below.
+- **Terminal → browser:** run the command below. It also writes the merged
+  progress to Downloads as `margin-notes-progress.json`. Then on the published
+  page, Progress → **Load progress file** and pick that file.
 
 ```bash
-course/run.sh web
+course/run.sh sync
 ```
 
-- **Moving progress over:** the Progress page has a box for pasting
-  `course/.progress.json` from the terminal trainer, which merges it in.
+`sync` finds the newest `margin-notes-progress*.json` in `~/Downloads` or, under
+WSL, in `/mnt/c/Users/<you>/Downloads`. You can also pass a path. Every copy
+is merged with the same rules on both sides (`course/progress.py`, mirrored in
+the page):
+- passed and read lessons: kept if passed or read anywhere;
+- final passed: true if passed anywhere;
+- exam attempts: all attempts kept;
+- review cards: the most recently answered version wins;
+- answer counts: the larger count wins.
+
+So you can sync in either direction, any number of times, and never lose
+progress.
+
 - **How it is built:** `course/web/build.py` exports the lesson files,
   questions and glossary to `dist/data.json`. Python exercise generators can't
   run in the browser, so it samples about 3,800 concrete practice exercises from

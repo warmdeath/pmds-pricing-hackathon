@@ -210,23 +210,26 @@ const h = (tag, attrs = {}, ...kids) => {
 };
 const today = () => new Date().toISOString().slice(0, 10);
 const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
-function blankState() {
-  return { read: {}, stats: {}, cards: {}, exams: [], fund: { passed: {}, finals: [], final_passed: false }, updated: 0 };
-}
+function blankState() { return blankLike(); }
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
 
-/* ---------- storage: claude db (synced) or this browser ---------- */
+/* ---------- storage ----------
+   cloud: the published page, saved to your claude.ai account (laptop + phone)
+   file:  `course/run.sh web`, saved to course/.progress.json (shared live with the terminal)
+   local: anything else, saved in this browser only
+   All three combine copies with mergeStates(), the same rules as course/progress.py. */
 const Store = {
   mode: "local", ref: null, writing: false, dirty: false, timer: null,
   readLocal() { try { return JSON.parse(localStorage.getItem("mn-progress") || "null"); } catch { return null; } },
   writeLocal(s) { try { localStorage.setItem("mn-progress", JSON.stringify(s)); } catch {} },
   async init() {
-    let remote = null;
     const local = this.readLocal();
+    let remote = null;
+    const timeout = (p, ms = 10000) => Promise.race([p, new Promise((r) => setTimeout(() => r(null), ms))]);
     try {
       if (window.claude && typeof window.claude.use === "function") {
-        const timeout = (p) => Promise.race([p, new Promise((r) => setTimeout(() => r(null), 10000))]);
-        const [db, user] = await timeout(Promise.all([window.claude.use("db"), window.claude.use("user")])) || [];
+        const pair = await timeout(Promise.all([window.claude.use("db"), window.claude.use("user")]));
+        const [db, user] = pair || [];
         const uid = user ? await user.id() : null;
         if (db && uid) {
           this.ref = db.doc("data/users/" + uid + "/progress");
@@ -235,47 +238,108 @@ const Store = {
         }
       }
     } catch (e) { this.mode = "local"; }
-    S.st = mergeStates(local, remote) || blankState();
+    if (this.mode === "local") {
+      try {
+        const r = await timeout(fetch("/api/progress", { cache: "no-store" }), 3000);
+        if (r && r.ok && (r.headers.get("content-type") || "").includes("json")) { remote = await r.json(); this.mode = "file"; }
+      } catch (e) {}
+    }
+    S.st = mergeStates(local, remote);
     this.writeLocal(S.st);
     this.label();
+    if (this.mode !== "local" && JSON.stringify(remote) !== JSON.stringify(S.st)) { this.dirty = true; this.flush(); }
   },
   label() {
-    $("#sync").textContent = this.mode === "cloud" ? "● synced to your account" : "● saved in this browser";
-    $("#sync").title = this.mode === "cloud" ? "Progress syncs between your devices" : "Open the published page to sync across devices";
+    const t = { cloud: ["● synced to your account", "Progress syncs between devices where you open this page"],
+                file: ["● synced with the terminal", "Shares course/.progress.json with course/run.sh"],
+                local: ["● saved in this browser", "Use the published page or `course/run.sh web` to sync"] }[this.mode];
+    $("#sync").textContent = t[0]; $("#sync").title = t[1];
   },
   save() {
     S.st.updated = Date.now();
     this.writeLocal(S.st);
-    if (this.mode !== "cloud") return;
+    if (this.mode === "local") return;
     this.dirty = true;
     clearTimeout(this.timer);
     this.timer = setTimeout(() => this.flush(), 1200);
   },
   async flush() {
-    if (!this.dirty || this.writing || !this.ref) return;
+    if (!this.dirty || this.writing || this.mode === "local") return;
     this.writing = true; this.dirty = false;
-    try { await this.ref.set({ json: JSON.stringify(S.st), updated: S.st.updated }); $("#sync").textContent = "● synced to your account"; }
-    catch (e) { $("#sync").textContent = "● sync paused — saved in this browser"; }
+    try {
+      if (this.mode === "cloud") await this.ref.set({ json: JSON.stringify(S.st), updated: S.st.updated });
+      else {
+        const r = await fetch("/api/progress", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(S.st) });
+        if (!r.ok) throw new Error("http " + r.status);
+        S.st = mergeStates(S.st, await r.json()); this.writeLocal(S.st);
+      }
+      this.label();
+    } catch (e) { $("#sync").textContent = "● sync paused — saved in this browser"; }
     this.writing = false;
     if (this.dirty) this.timer = setTimeout(() => this.flush(), 1200);
   },
+  /* pull what other devices / the terminal saved meanwhile */
+  async refresh() {
+    if (this.mode === "local") return false;
+    let remote = null;
+    try {
+      if (this.mode === "cloud") { const snap = await this.ref.get(); if (snap.exists) remote = JSON.parse(snap.data().json || "null"); }
+      else { const r = await fetch("/api/progress", { cache: "no-store" }); if (r.ok) remote = await r.json(); }
+    } catch (e) { return false; }
+    if (!remote) return false;
+    const merged = mergeStates(S.st, remote);
+    const changed = JSON.stringify(merged) !== JSON.stringify(S.st);
+    S.st = merged; this.writeLocal(S.st);
+    return changed;
+  },
 };
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") Store.flush(); });
+async function pullAndRefresh() {
+  const changed = await Store.refresh();
+  if (changed && !S.session) { route(); toast("Progress updated from your other device."); }
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") Store.flush(); else pullAndRefresh();
+});
+window.addEventListener("focus", () => pullAndRefresh());
 
+/* Same rules as course/progress.py merge(): unions, newest card wins, max stats. */
+function blankLike() { return { read: {}, stats: {}, cards: {}, exams: [], fund: { passed: {}, finals: [], final_passed: false }, updated: 0 }; }
+function normaliseState(s) {
+  const o = blankLike(); if (!s || typeof s !== "object") return o;
+  o.read = { ...(s.read || {}) };
+  for (const [k, v] of Object.entries(s.stats || {})) if (v && typeof v === "object") o.stats[k] = { right: v.right | 0, wrong: v.wrong | 0 };
+  for (const [k, v] of Object.entries(s.cards || {})) if (v && typeof v === "object") o.cards[k] = { ...v };
+  o.exams = [...(s.exams || [])];
+  const f = s.fund || {};
+  o.fund = { passed: { ...(f.passed || {}) }, finals: [...(f.finals || [])], final_passed: !!f.final_passed };
+  o.updated = Number(s.updated) || 0;
+  return o;
+}
+const numKey = (v) => { const n = Number(v); return isFinite(n) && v !== null && v !== "" ? n.toFixed(6).replace(/0+$/, "").replace(/\.$/, "") : String(v); };
+const attemptKey = (e) => `${e.date}|${numKey(e.right)}|${numKey(e.total)}|${numKey(e.grade)}`;
+function unionAttempts(a, b) {
+  const seen = new Set(), out = [];
+  for (const e of [...a, ...b]) { const k = attemptKey(e); if (!seen.has(k)) { seen.add(k); out.push(e); } }
+  return out.sort((x, y) => (String(x.date) + "|" + attemptKey(x) < String(y.date) + "|" + attemptKey(y) ? -1 : 1));
+}
+function unionDates(a, b) {
+  const o = { ...a };
+  for (const [k, v] of Object.entries(b)) if (!(k in o) || String(v) < String(o[k])) o[k] = v;
+  return Object.fromEntries(Object.entries(o).sort(([x], [y]) => (x < y ? -1 : x > y ? 1 : 0)));
+}
+const sortObj = (o) => Object.fromEntries(Object.entries(o).sort(([x], [y]) => (x < y ? -1 : x > y ? 1 : 0)));
 function mergeStates(a, b) {
-  if (!a) return b; if (!b) return a;
-  const [base, other] = (a.updated || 0) >= (b.updated || 0) ? [a, b] : [b, a];
-  const m = JSON.parse(JSON.stringify(base));
-  m.fund = m.fund || { passed: {}, finals: [], final_passed: false };
-  const of = other.fund || {};
-  for (const [k, v] of Object.entries(of.passed || {})) if (!m.fund.passed[k]) m.fund.passed[k] = v;
-  m.fund.final_passed = !!(m.fund.final_passed || of.final_passed);
-  const seen = new Set((m.fund.finals || []).map((e) => e.date + e.right + e.total));
-  for (const e of of.finals || []) if (!seen.has(e.date + e.right + e.total)) m.fund.finals.push(e);
-  for (const [k, v] of Object.entries(other.read || {})) if (!m.read[k]) m.read[k] = v;
-  for (const [k, v] of Object.entries(other.cards || {})) if (!m.cards[k]) m.cards[k] = v;
-  for (const [k, v] of Object.entries(other.stats || {})) if (!m.stats[k]) m.stats[k] = v;
-  return m;
+  a = normaliseState(a); b = normaliseState(b);
+  const cards = { ...a.cards };
+  for (const [k, c] of Object.entries(b.cards)) if (!(k in cards) || (c.t || 0) > (cards[k].t || 0)) cards[k] = c;
+  const stats = {}; for (const [k, v] of Object.entries(a.stats)) stats[k] = { ...v };
+  for (const [k, v] of Object.entries(b.stats)) { const c = stats[k] || (stats[k] = { right: 0, wrong: 0 }); c.right = Math.max(c.right, v.right); c.wrong = Math.max(c.wrong, v.wrong); }
+  return {
+    read: unionDates(a.read, b.read), stats: sortObj(stats), cards: sortObj(cards),
+    exams: unionAttempts(a.exams, b.exams),
+    fund: { passed: unionDates(a.fund.passed, b.fund.passed), finals: unionAttempts(a.fund.finals, b.fund.finals), final_passed: a.fund.final_passed || b.fund.final_passed },
+    updated: Math.max(a.updated, b.updated),
+  };
 }
 
 /* ---------- lookups ---------- */
@@ -333,6 +397,7 @@ function record(lessonId, cardId, ok) {
   c.box = ok ? Math.min(5, c.box + 1) : 1;
   c.due = addDays(S.D.config.leitnerDays[c.box]);
   c.lesson = lessonId;
+  c.t = Date.now();
   S.st.cards[cardId] = c;
   Store.save();
 }
@@ -889,6 +954,7 @@ function viewLesson(id) {
   const checkHost = h("div", {});
   const startBtn = h("button", { class: "btn primary big", text: isPassed(id) ? "Retake the mastery check" : `Take the mastery check (${l.ex.length} questions)`, onclick: () => startCheck() });
   function startCheck() {
+    startBtn.hidden = true;
     const items = shuffle(l.ex.map((x) => itemFromFex(x, id)));
     runSession(checkHost, items, { title: `Mastery check ${id}`, onDone: (right, n, box) => {
       const need = Math.ceil(S.D.config.passShare * n), ok = right >= need;
@@ -1018,7 +1084,6 @@ function viewProgress() {
   const right = Object.values(S.st.stats).reduce((a, s) => a + s.right, 0), wrong = Object.values(S.st.stats).reduce((a, s) => a + s.wrong, 0);
   const boxes = [1, 2, 3, 4, 5].map((b) => Object.values(S.st.cards).filter((c) => c.box === b).length);
   const weak = Object.entries(S.st.stats).filter(([, s]) => s.right + s.wrong >= 3).map(([id, s]) => [id, s.right / (s.right + s.wrong)]).sort((a, b) => a[1] - b[1]).slice(0, 6);
-  const ta = h("textarea", { id: "import-json", placeholder: "Paste the contents of course/.progress.json from the terminal trainer here" });
   view(h("section", { class: "grid2" },
     h("div", { class: "panel", style: "display:grid;gap:8px" }, h("h2", { text: "Progress" }),
       h("div", {}, `Fundamentals: `, h("b", { class: "num", text: `${doneCount()}/${S.order.length}` }), " lessons passed"),
@@ -1026,11 +1091,42 @@ function viewProgress() {
       h("div", {}, "Review boxes (1 shaky … 5 mastered): ", h("b", { class: "num", text: boxes.join(" · ") })),
       weak.length ? h("div", {}, "Weakest lessons: ", h("b", { text: weak.map(([id, a]) => `${id} (${Math.round(a * 100)}%)`).join(", ") })) : null,
       fs().finals.length ? h("div", {}, "Finals: ", h("b", { text: fs().finals.map((e) => `${f2(e.grade, 0)}/30`).join(", ") })) : null,
-      h("div", { class: "muted", text: Store.mode === "cloud" ? "Saved to your account; it syncs between laptop and phone." : "Saved in this browser only. Open the published page to sync across devices." })),
-    h("div", { class: "panel", style: "display:grid;gap:8px" }, h("h2", { text: "Bring progress from the terminal" }),
-      h("p", { class: "muted", text: "Already used course/run.sh? Paste course/.progress.json to merge it in (passed lessons, review deck, finals)." }), ta,
-      h("div", { class: "row" }, h("button", { class: "btn primary", text: "Merge", onclick: () => { try { const t = JSON.parse(ta.value); t.updated = 0; S.st = mergeStates(S.st, t); Store.save(); toast("Progress merged."); route(); } catch { toast("That isn't valid JSON — paste the whole file."); } } }),
-        h("button", { class: "btn", text: "Copy my progress", onclick: () => { const txt = JSON.stringify(S.st); navigator.clipboard.writeText(txt).then(() => toast("Copied."), () => { ta.value = txt; ta.select(); toast("Selected — copy it with Ctrl+C."); }); } })))));
+      h("div", { class: "muted", text: { cloud: "Saved to your account; it syncs between laptop and phone.", file: "Saved to course/.progress.json; shared live with the terminal trainer.", local: "Saved in this browser only." }[Store.mode] })),
+    syncPanel()));
+}
+async function saveProgressFile() {
+  const data = JSON.stringify(S.st, null, 1), filename = "margin-notes-progress.json";
+  try {
+    const dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null;
+    if (dl) { await dl.save({ filename, data }); toast("Saved to your Downloads folder. Now run: course/run.sh sync"); return; }
+  } catch (e) { if (e && e.code === "declined") return; }
+  if (Store.mode !== "cloud") {
+    const a = h("a", { href: URL.createObjectURL(new Blob([data], { type: "application/json" })), download: filename });
+    document.body.append(a); a.click(); a.remove(); toast("Saved to your Downloads folder."); return;
+  }
+  try { await navigator.clipboard.writeText(data); toast("Couldn't save a file here — copied to the clipboard instead."); } catch { toast("Couldn't save a file here."); }
+}
+function mergeIncoming(text) {
+  try { S.st = mergeStates(S.st, JSON.parse(text)); Store.save(); Store.flush(); toast("Progress merged."); route(); }
+  catch { toast("That isn't a progress file — pick margin-notes-progress.json or .progress.json."); }
+}
+function syncPanel() {
+  const fileIn = h("input", { type: "file", id: "load-progress", accept: ".json,application/json", hidden: true,
+    onchange: (e) => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => mergeIncoming(String(r.result)); r.readAsText(f); e.target.value = ""; } });
+  const ta = h("textarea", { id: "import-json", placeholder: "…or paste the contents of a progress file here" });
+  const how = Store.mode === "file"
+    ? [h("p", { text: "This page is running from course/run.sh web, so it already shares progress with the terminal live: anything you do in either one shows up in the other." }),
+       h("p", { class: "muted", text: "To bring this progress to the published page (and your phone), run course/run.sh sync in the terminal, then on the published page use Load progress file." })]
+    : [h("p", { text: "Your laptop and phone sync automatically on this page. To move progress to or from the terminal trainer:" }),
+       h("ol", { class: "prose", style: "font:inherit;margin:0;padding-left:20px" },
+         h("li", {}, h("b", { text: "Browser → terminal: " }), "Save progress file, then run ", h("code", { text: "course/run.sh sync" }), " in the repo."),
+         h("li", {}, h("b", { text: "Terminal → browser: " }), "run ", h("code", { text: "course/run.sh sync" }), " (it writes margin-notes-progress.json to your Downloads), then Load progress file and pick it.")),
+       h("p", { class: "muted", text: "Doing both directions once is a full two-way sync; repeating it never loses progress." })];
+  return h("div", { class: "panel", style: "display:grid;gap:10px" }, h("h2", { text: "Sync with the terminal" }), ...how,
+    h("div", { class: "row" }, h("button", { class: "btn primary", text: "Save progress file", onclick: saveProgressFile }),
+      h("button", { class: "btn", text: "Load progress file", onclick: () => fileIn.click() }), fileIn),
+    h("details", {}, h("summary", { class: "muted", text: "Paste instead" }), h("div", { style: "display:grid;gap:8px;margin-top:8px" }, ta,
+      h("button", { class: "btn", text: "Merge pasted progress", onclick: () => mergeIncoming(ta.value) }))));
 }
 
 /* ---------- router ---------- */
@@ -1049,7 +1145,7 @@ window.addEventListener("hashchange", route);
     const res = await fetch("data.json"); S.D = await res.json();
   } catch (e) { $("#app").replaceChildren(h("div", { class: "panel", text: "Couldn't load the course data (data.json). If you opened the file directly, run `course/run.sh web` instead." })); return; }
   indexData();
-  S.st = Store.readLocal() || blankState(); Store.label(); route();
+  S.st = normaliseState(Store.readLocal()); Store.label(); route();
   await Store.init(); if (!S.session) route();
 })();
 </script>
