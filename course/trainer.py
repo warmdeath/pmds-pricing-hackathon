@@ -1,6 +1,17 @@
 """Economics & finance crash course -- terminal trainer.
 
     course/run.sh                 interactive menu
+
+  FUNDAMENTALS (do these first; they unlock the rest)
+    course/run.sh f               overview of the 18 units and your progress
+    course/run.sh f next          read the next lesson, then its mastery check
+    course/run.sh f unit F4       lessons of one unit
+    course/run.sh f learn F4.3    read an unlocked lesson (+ mastery check)
+    course/run.sh f check F4.3    retake a lesson's mastery check
+    course/run.sh f practice [F4|F4.3]   unlimited exercises on unlocked lessons
+    course/run.sh f final         the Fundamentals final (≥ 18/30 unlocks the course)
+
+  GENERAL COURSE (locked until the Fundamentals final is passed)
     course/run.sh syllabus        list modules and lessons
     course/run.sh learn 1.3       read a lesson, then answer its check questions
     course/run.sh practice [1.3]  unlimited auto-checked numeric exercises
@@ -34,6 +45,8 @@ from rich.markdown import Markdown  # noqa: E402
 from rich.panel import Panel  # noqa: E402
 from rich.table import Table  # noqa: E402
 
+import fundamentals as F  # noqa: E402
+from fgenerators import FGENERATORS  # noqa: E402
 from generators import GENERATORS, Exercise  # noqa: E402
 from glossary import GLOSSARY  # noqa: E402
 from questions import QUESTIONS  # noqa: E402
@@ -55,7 +68,8 @@ def load_state() -> dict:
             return json.loads(STATE_FILE.read_text())
         except json.JSONDecodeError:
             pass
-    return {"read": {}, "stats": {}, "cards": {}, "exams": []}
+    return {"read": {}, "stats": {}, "cards": {}, "exams": [],
+            "fund": {"passed": {}, "finals": [], "final_passed": False}}
 
 
 def save_state(state: dict) -> None:
@@ -74,6 +88,21 @@ def record(state: dict, lesson_id: str, card_id: str, correct: bool) -> None:
     card["lesson"] = lesson_id
     state["cards"][card_id] = card
     save_state(state)
+
+
+def locked_notice(state: dict) -> bool:
+    """Print a notice and return True if the general course is still locked."""
+    if F.general_unlocked(state):
+        return False
+    nxt = F.next_lesson(state)
+    done = len(F.fstate(state)["passed"])
+    console.print(Panel(
+        "🔒 The general course unlocks after the [bold]Fundamentals final[/] (≥ 18/30).\n"
+        f"Fundamentals progress: {done}/{len(F.lessons())} lessons. "
+        + (f"Next: {nxt.id} {nxt.title} → `course/run.sh f next`" if nxt
+           else "All lessons passed → `course/run.sh f final`"),
+        border_style="yellow"))
+    return True
 
 
 # =============================================================================
@@ -377,8 +406,15 @@ def cmd_review(state: dict, limit: int = 15, seed: int | None = None) -> None:
         return
     rng = random.Random(seed)
     rng.shuffle(due)
-    by_id = {q["id"]: q for q in QUESTIONS}
-    gens = {f"gen:{g.topic}": g for g in GENERATORS}
+    unlocked = F.general_unlocked(state)
+    by_id = {q["id"]: q for q in QUESTIONS} if unlocked else {}
+    fstatic = {fx.id: fx for x in F.lessons() for fx in x.exercises}
+    gens = {f"gen:{g.topic}": g for g in GENERATORS} if unlocked else {}
+    gens.update({f"gen:{g.topic}": g for g in FGENERATORS})
+    due = [cid for cid in due if cid in by_id or cid in fstatic or cid in gens]
+    if not due:
+        console.print("nothing due right now.")
+        return
     console.print(f"[bold]Review[/] — {len(due)} item(s) due; doing up to {limit}.")
     done = 0
     try:
@@ -386,6 +422,12 @@ def cmd_review(state: dict, limit: int = 15, seed: int | None = None) -> None:
             done += 1
             if cid in by_id:
                 run_mcq(_shuffled(by_id[cid], rng), state, f"[{done}] ")
+            elif cid in fstatic:
+                fx = fstatic[cid]
+                if fx.kind == "mcq":
+                    run_mcq(_shuffled(F.to_mcq(fx), rng), state, f"[{done}] ")
+                else:
+                    run_exercise(F.to_exercise(fx), state, f"[{done}] ")
             elif cid in gens:
                 run_exercise(gens[cid].make(rng), state, f"[{done}] ")
     except Quit:
@@ -442,6 +484,12 @@ def cmd_map() -> None:
 
 
 def cmd_progress(state: dict) -> None:
+    fs = F.fstate(state)
+    best = max((e["grade"] for e in fs["finals"]), default=None)
+    console.print(f"[bold]Fundamentals[/]: {len(fs['passed'])}/{len(F.lessons())} lessons passed"
+                  + (f", best final {best:.0f}/30" if best is not None else "")
+                  + (" — general course [green]unlocked[/]" if F.general_unlocked(state)
+                     else " — general course [yellow]locked[/]"))
     lessons = all_lessons()
     read = len([lesson for lesson in lessons if lesson["id"] in state["read"]])
     right = sum(s["right"] for s in state["stats"].values())
@@ -505,6 +553,23 @@ def cmd_selftest() -> int:
                 if numbers_match(wrong, ex.answer, ex):
                     problems.append(f"generator {g.topic}: a trap equals the answer ({ex.prompt[:60]}…)")
                     break
+    fproblems, fstats = F.selftest_problems()
+    problems += fproblems
+    flessons = {x.id for x in F.lessons()}
+    for g in FGENERATORS:
+        if g.lesson not in flessons:
+            problems.append(f"fundamentals generator {g.topic} unknown lesson {g.lesson}")
+        for _ in range(200):
+            ex = g.make(rng)
+            if not math.isfinite(ex.answer):
+                problems.append(f"fundamentals generator {g.topic} non-finite answer")
+                break
+            if any(ex.matches(w) for w in ex.traps):
+                problems.append(f"fundamentals generator {g.topic}: a trap equals the answer")
+                break
+    console.print(f"Fundamentals: {fstats['units']} units, {fstats['lessons']} lessons "
+                  f"({fstats['words']:,} words), {fstats['exercises']} mastery exercises, "
+                  f"{len(FGENERATORS)} practice generators")
     words = sum(len((HERE / "content" / lesson["file"]).read_text().split()) for lesson in all_lessons()
                 if (HERE / "content" / lesson["file"]).exists())
     console.print(f"{len(all_lessons())} lessons ({words:,} words), {len(QUESTIONS)} concept questions, "
@@ -528,6 +593,7 @@ def _lesson_key(lid: str):
 # =============================================================================
 
 MENU = [
+    ("0", "FUNDAMENTALS", "start here: 200 micro-lessons that unlock everything else"),
     ("1", "Syllabus", "all modules and lessons, with your progress"),
     ("2", "Learn", "read a lesson, then check questions"),
     ("3", "Practice", "unlimited auto-checked numeric exercises"),
@@ -540,6 +606,42 @@ MENU = [
 ]
 
 
+GATED_KEYS = {"2", "3", "4", "5", "8"}
+
+
+def ui() -> "F.UI":
+    return F.UI(console, ask, pause, run_mcq, run_exercise, _shuffled, save_state, record,
+                Markdown, Panel, Table, Quit)
+
+
+def fundamentals_menu(state: dict) -> None:
+    options = [("1", "Overview", "units and progress"), ("2", "Next lesson", "read + mastery check"),
+               ("3", "Open a lesson", "by id, e.g. F4.3"), ("4", "Retake a check", "by id"),
+               ("5", "Practice", "unlimited exercises on unlocked lessons"),
+               ("6", "Final exam", "≥ 18/30 unlocks the general course")]
+    while True:
+        table = Table(show_header=False, box=None, title="FUNDAMENTALS", title_justify="left")
+        for key, name, desc in options:
+            table.add_row(f"[bold]{key}[/]", name, f"[dim]{desc}[/]")
+        console.print(table)
+        try:
+            choice = ask("choose (q = back):")
+            if choice == "1":
+                F.cmd_overview(ui(), state)
+            elif choice == "2":
+                F.cmd_learn(ui(), state, None)
+            elif choice == "3":
+                F.cmd_learn(ui(), state, ask("lesson id:"))
+            elif choice == "4":
+                F.cmd_check(ui(), state, ask("lesson id:"))
+            elif choice == "5":
+                F.cmd_practice(ui(), state, ask("unit or lesson (Enter = all unlocked):") or None)
+            elif choice == "6":
+                F.cmd_final(ui(), state)
+        except Quit:
+            return
+
+
 def menu() -> None:
     state = load_state()
     console.print(Panel(
@@ -548,8 +650,10 @@ def menu() -> None:
         "[dim]q goes back / quits from anywhere[/]", border_style="green"))
     while True:
         table = Table(show_header=False, box=None)
+        locked = not F.general_unlocked(state)
         for key, name, desc in MENU:
-            table.add_row(f"[bold]{key}[/]", name, f"[dim]{desc}[/]")
+            lock = " 🔒" if locked and key in GATED_KEYS else ""
+            table.add_row(f"[bold]{key}[/]", name + lock, f"[dim]{desc}[/]")
         console.print(table)
         try:
             choice = ask("choose:")
@@ -557,6 +661,11 @@ def menu() -> None:
             console.print("bye — keep going!")
             return
         try:
+            if choice == "0":
+                fundamentals_menu(state)
+                continue
+            if choice in GATED_KEYS and locked_notice(state):
+                continue
             if choice == "1":
                 cmd_syllabus(state=state)
             elif choice == "2":
@@ -585,6 +694,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(prog="course/run.sh", description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="cmd")
+    for name in ("f", "fundamentals"):
+        p = sub.add_parser(name, help="the Fundamentals section (start here)")
+        p.add_argument("action", nargs="?", default="overview",
+                       choices=["overview", "next", "unit", "learn", "check", "practice", "final"])
+        p.add_argument("target", nargs="?")
+        p.add_argument("--no-pause", action="store_true")
+        p.add_argument("--minutes", type=float, default=F.FINAL_MINUTES)
+        p.add_argument("--questions", type=int, default=F.FINAL_QUESTIONS)
+        p.add_argument("--seed", type=int)
     sub.add_parser("syllabus")
     p = sub.add_parser("learn")
     p.add_argument("lesson", nargs="?")
@@ -615,6 +733,24 @@ def main() -> int:
     try:
         if args.cmd is None:
             menu()
+        elif args.cmd in ("f", "fundamentals"):
+            action, target = args.action, args.target
+            if action == "overview":
+                F.cmd_overview(ui(), state)
+            elif action == "next":
+                F.cmd_learn(ui(), state, None, interactive=not args.no_pause)
+            elif action == "unit":
+                F.cmd_unit(ui(), state, target or "F1")
+            elif action == "learn":
+                F.cmd_learn(ui(), state, target, interactive=not args.no_pause)
+            elif action == "check":
+                F.cmd_check(ui(), state, target or "")
+            elif action == "practice":
+                F.cmd_practice(ui(), state, target)
+            elif action == "final":
+                F.cmd_final(ui(), state, args.minutes, args.questions, args.seed)
+        elif args.cmd in ("learn", "practice", "quiz", "exam", "map") and locked_notice(state):
+            return 0
         elif args.cmd == "syllabus":
             cmd_syllabus(state=state)
         elif args.cmd == "learn":

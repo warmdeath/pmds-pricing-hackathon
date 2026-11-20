@@ -1,8 +1,9 @@
 # Markets, Economics & Finance — crash course
 
-A terminal trainer that covers roughly the economics and finance content of a
-first university semester in economics and management. It has four modules and
-30 lessons, about 20,000 words in total. You get unlimited auto-checked exercises,
+A terminal trainer in two sections. **Fundamentals** (200 micro-lessons, done
+first) builds the statistics, economic reasoning and accounting/finance basics.
+The **general course** (4 modules, 30 lessons, about 20,000 words) then covers
+roughly the economics and finance content of a first university semester. You get unlimited auto-checked exercises,
 concept quizzes, timed exams graded out of 30, spaced repetition and a glossary.
 
 It sits next to the practice arena (`arena/`), and its **mechanics map** shows
@@ -11,7 +12,71 @@ what the mechanic is and where it is defined. It never says what an agent should
 do. The lessons teach general theory with textbook examples (bakeries, oil,
 bonds, used cars), not strategy for your agent.
 
-## Run it
+## Start here: Fundamentals
+
+Fundamentals is a separate section of **200 micro-lessons in 18 units**, built
+from a high-school level up. It covers what a first-year economics student uses
+everywhere: **probability & statistics**, **economic & business reasoning**,
+and **accounting & financial literacy**. It is the first thing to do: the
+general course stays **locked** until you pass the Fundamentals final.
+
+| unit | track | topic | unit | track | topic |
+| --- | --- | --- | --- | --- | --- |
+| F1 | Reasoning | Thinking like an economist | F10 | Accounting & finance | Financial statements |
+| F2 | Reasoning | The numbers of economics | F11 | Reasoning | Business decisions |
+| F3 | Reasoning | Reading graphs and data | F12 | Statistics | Random variables & distributions |
+| F4 | Statistics | Describing data | F13 | Accounting & finance | Investment & financing |
+| F5 | Reasoning | Markets and prices | F14 | Accounting & finance | Analysing statements |
+| F6 | Reasoning | Revenue, cost and profit | F15 | Statistics | Sampling & inference |
+| F7 | Accounting & finance | Accounting foundations | F16 | Statistics | Correlation & regression |
+| F8 | Accounting & finance | Money and interest | F17 | Statistics | Statistics at work |
+| F9 | Statistics | Probability | F18 | Mixed | Capstone business cases |
+
+The units interleave the three tracks so each one builds on the previous ones.
+For example, descriptive statistics (F4) comes before the cost analysis in F6,
+and interest (F8) comes before investment appraisal (F13).
+
+**How it works**
+
+- Every lesson is one concept: an explanation, a worked example and a
+  **mastery check** of 3–4 questions (617 in total).
+- You pass a lesson with **at least 75 %** of its check. With 3 questions that
+  means all 3; with 4 questions, 3 of 4. Numeric questions allow a second
+  attempt and a hint. Choosing "show solution" counts as wrong.
+- Lessons open **in order**: passing one unlocks the next. You can re-read
+  and retake any lesson you have unlocked.
+- `f practice` gives unlimited auto-generated exercises on everything you
+  have unlocked. There are 83 exercise types across all 18 units.
+- When all 200 lessons are passed, `f final` opens: 30 questions drawn from
+  every unit, 90 minutes, graded out of 30. **18 or more unlocks the general
+  course.** You can retake the final.
+- Lessons and exercises you miss feed the spaced-repetition `review`.
+
+```bash
+course/run.sh f
+```
+
+```bash
+course/run.sh f next
+```
+
+| Command | What it does |
+| --- | --- |
+| `course/run.sh f` | Overview of the 18 units and your progress |
+| `course/run.sh f next` | Read the next lesson, then take its mastery check |
+| `course/run.sh f unit F4` | List one unit's lessons and their status |
+| `course/run.sh f learn F4.3` | Re-read an unlocked lesson (`--no-pause` prints it without the check) |
+| `course/run.sh f check F4.3` | Retake a lesson's mastery check |
+| `course/run.sh f practice [F4 \| F4.3]` | Unlimited exercises on unlocked material |
+| `course/run.sh f final` | The Fundamentals final (opens when all lessons are passed) |
+
+In the interactive menu (`course/run.sh`) Fundamentals is option **0**. The
+locked general-course options are marked 🔒. The glossary, review and progress
+stay available throughout.
+
+## The general course (unlocks after Fundamentals)
+
+### Run it
 
 From the repository root (WSL / Linux / macOS), after `uv sync`:
 
@@ -32,13 +97,13 @@ course/run.sh
 | `course/run.sh glossary [term]` | About 200 terms with definitions, formulas, examples and where they appear in the simulator |
 | `course/run.sh map` | Mechanics map: concept → mechanic → file or README section |
 | `course/run.sh progress` | Lessons read, accuracy, weakest lessons, exam history |
-| `course/run.sh selftest` | Content integrity checks |
+| `course/run.sh selftest` | Content integrity checks (both sections) |
 
 Type `q` to go back or quit from anywhere. Numeric answers accept `12.5`,
 `-0.8`, `25%` and `3/4`. Your progress is saved in `course/.progress.json`,
 which git ignores.
 
-## Syllabus
+### Syllabus
 
 **M1 Microeconomics.**
 - 1.1 Scarcity, opportunity cost and marginal thinking
@@ -81,7 +146,7 @@ which git ignores.
 Each lesson has a big-picture intro, an analogy, worked numerical examples,
 common pitfalls and a summary.
 
-## A suggested pace
+### A suggested pace
 
 About 2–3 lessons a day:
 
@@ -99,6 +164,11 @@ the time value of money. M4 is general background.
   official syllabus and it does not replace a textbook. Standard references
   for going deeper: Pindyck & Rubinfeld or Varian (micro), Dixit & Skeath (games),
   Krishna (auctions), Berk & DeMarzo (finance), Blanchard (macro).
-- Files: lessons in `content/`, concept questions in `questions.py`, exercise
+- Tests: `uv run python -m unittest discover -s course/tests`. Setting
+  `COURSE_UNLOCK_ALL=1` bypasses the lock; it exists for testing.
+- Fundamentals files: lessons in `fundamentals/uNN_*.md` (lesson text plus
+  mastery exercises in a simple format described in `fundamentals.py`),
+  practice generators in `fgenerators.py`.
+- General course files: lessons in `content/`, concept questions in `questions.py`, exercise
   generators in `generators.py`, glossary in `glossary.py`, mechanics map in
   `simmap.py`, syllabus in `syllabus.py`, engine in `trainer.py`.
