@@ -1,0 +1,1055 @@
+<title>Margin Notes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: a study desk — top bar, one reading column for lessons (~68ch),
+   a two-column dashboard on wide screens, everything single-column on phones.
+   Charts sit on faint graph paper, the subject's native surface. */
+:root {
+  --paper: #f3f6f7;
+  --card: #ffffff;
+  --ink: #15222a;
+  --muted: #586a74;
+  --line: #d6dfe3;
+  --grid: #e6edf0;
+  --accent: #0d6b72;
+  --accent-soft: #dcefef;
+  --supply: #b8611a;
+  --supply-soft: #f6e5d6;
+  --good: #2c7a47;
+  --good-soft: #e1f1e6;
+  --bad: #b13838;
+  --bad-soft: #f7e1e1;
+  --warn: #9a6400;
+  --f-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-read: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-ui: Inter, "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0e161b; --card: #152029; --ink: #e2eaed; --muted: #97a9b2; --line: #283842; --grid: #1c2a33;
+  --accent: #4db1b7; --accent-soft: #163a3d; --supply: #e39a57; --supply-soft: #3b2a1b;
+  --good: #63c48a; --good-soft: #17301f; --bad: #e87474; --bad-soft: #3a1c1c; --warn: #e0b04f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #0e161b; --card: #152029; --ink: #e2eaed; --muted: #97a9b2; --line: #283842; --grid: #1c2a33;
+  --accent: #4db1b7; --accent-soft: #163a3d; --supply: #e39a57; --supply-soft: #3b2a1b;
+  --good: #63c48a; --good-soft: #17301f; --bad: #e87474; --bad-soft: #3a1c1c; --warn: #e0b04f; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--f-ui); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--card) }
+a { color: var(--accent) }
+button, input, select, textarea { font: inherit; color: inherit }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--card); border-bottom: 1px solid var(--line);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top-in { max-width: 1080px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; padding-block: 10px }
+.brand { font: 700 19px/1 var(--f-display); letter-spacing: -0.01em; text-decoration: none; color: var(--ink); display: flex; align-items: baseline; gap: 8px }
+.brand small { font: 500 11px var(--f-ui); color: var(--muted); letter-spacing: .06em; text-transform: uppercase }
+nav.main { display: flex; flex-wrap: wrap; gap: 2px; margin-left: auto }
+nav.main a { text-decoration: none; color: var(--muted); padding: 6px 10px; border-radius: 8px; font-weight: 500; font-size: 14px }
+nav.main a[aria-current="page"] { color: var(--accent); background: var(--accent-soft) }
+.sync { font-size: 12px; color: var(--muted); white-space: nowrap }
+
+main { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 22px 60px }
+.wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 22px }
+.read { max-width: 720px; margin: 0 auto; width: 100% }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; letter-spacing: -0.01em; margin: 0 }
+h1 { font-size: clamp(26px, 4vw, 34px); line-height: 1.15 }
+h2 { font-size: 21px }
+h3 { font-size: 16px }
+.eyebrow { font: 600 11.5px var(--f-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+.muted { color: var(--muted) }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; min-width: 0 }
+.btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--card); padding: 9px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; text-decoration: none; color: var(--ink) }
+.btn:hover { border-color: var(--accent) }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--card) }
+.btn.big { padding: 14px 18px; font-size: 16px; width: 100%; justify-content: center }
+.btn[disabled] { opacity: .5; cursor: not-allowed }
+.chip { display: inline-block; font: 600 11.5px var(--f-ui); padding: 2px 8px; border-radius: 99px; background: var(--grid); color: var(--muted); white-space: nowrap }
+.chip.ok { background: var(--good-soft); color: var(--good) }
+.chip.open { background: var(--accent-soft); color: var(--accent) }
+.bar { height: 8px; background: var(--grid); border-radius: 99px; overflow: hidden }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 99px }
+.num { font-variant-numeric: tabular-nums; font-family: var(--f-mono) }
+
+/* dashboard */
+.hero { display: grid; gap: 14px }
+.hero .stat { font: 700 44px/1 var(--f-display); font-variant-numeric: tabular-nums }
+.units { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px }
+.unit { display: grid; gap: 8px; text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px }
+.unit.locked { opacity: .55 }
+.unit .t { font-weight: 600 }
+.track-Reasoning { --tc: var(--accent) }
+.track-Statistics { --tc: var(--supply) }
+.track-Accounting-finance { --tc: var(--good) }
+.track-Mixed { --tc: var(--muted) }
+.unit .tr { font: 600 11px var(--f-ui); color: var(--tc); letter-spacing: .06em; text-transform: uppercase }
+.lessons { list-style: none; margin: 0; padding: 0; display: grid }
+.lessons li a, .lessons li span { display: flex; gap: 12px; align-items: baseline; padding: 10px 4px; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink) }
+.lessons li span { color: var(--muted) }
+.lessons .id { font: 500 13px var(--f-mono); color: var(--muted); min-width: 52px }
+
+/* lesson text */
+.prose { font: 17px/1.65 var(--f-read); min-width: 0 }
+.prose h2 { font-size: 21px; margin: 28px 0 8px }
+.prose h3 { margin: 22px 0 6px }
+.prose p, .prose ul, .prose ol { margin: 0 0 14px }
+.prose li { margin: 4px 0 }
+.prose pre { font: 14.5px/1.55 var(--f-mono); background: var(--accent-soft); color: var(--ink); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 0 0 16px }
+.prose code { font: 0.86em var(--f-mono); background: var(--grid); padding: 1px 5px; border-radius: 4px }
+.prose pre code { background: none; padding: 0; font-size: inherit }
+.prose blockquote { margin: 0 0 16px; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--supply); border-radius: 6px }
+.prose blockquote p:last-child { margin: 0 }
+.tablebox { overflow-x: auto; margin: 0 0 16px }
+.prose table { border-collapse: collapse; font: 14px/1.4 var(--f-ui); min-width: 100% }
+.prose th, .prose td { border-bottom: 1px solid var(--line); padding: 6px 10px; text-align: left; font-variant-numeric: tabular-nums }
+.prose th { font-weight: 600; background: var(--grid) }
+
+/* widgets */
+.widget { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 12px; margin: 8px 0 22px }
+.widget h3 { display: flex; gap: 8px; align-items: center }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px 18px }
+.ctrl { display: grid; gap: 2px; font-size: 13px; min-width: 0 }
+.ctrl label { display: flex; justify-content: space-between; gap: 8px; color: var(--muted) }
+.ctrl output { font: 500 13px var(--f-mono); color: var(--ink) }
+.ctrl input[type=range] { width: 100%; accent-color: var(--accent) }
+.plots { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px }
+svg.plot { width: 100%; height: auto; display: block; background: var(--card) }
+svg.plot .gridl { stroke: var(--grid); stroke-width: 1 }
+svg.plot .axis { stroke: var(--muted); stroke-width: 1.2 }
+svg.plot text { fill: var(--muted); font: 11px var(--f-ui) }
+svg.plot text.lab { fill: var(--ink); font-weight: 600 }
+svg.plot .d { stroke: var(--accent); stroke-width: 2.4; fill: none }
+svg.plot .s { stroke: var(--supply); stroke-width: 2.4; fill: none }
+svg.plot .g { stroke: var(--good); stroke-width: 2.2; fill: none }
+svg.plot .k { stroke: var(--ink); stroke-width: 1.6; fill: none }
+svg.plot .dash { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 4; fill: none }
+svg.plot .fd { fill: var(--accent); opacity: .18 }
+svg.plot .fs { fill: var(--supply); opacity: .22 }
+svg.plot .fg { fill: var(--good); opacity: .22 }
+svg.plot .fb { fill: var(--bad); opacity: .25 }
+svg.plot .fk { fill: var(--muted); opacity: .25 }
+svg.plot .dot { fill: var(--ink); stroke: var(--card); stroke-width: 2 }
+svg.plot .bard { fill: var(--accent); opacity: .75 }
+svg.plot .bars { fill: var(--supply); opacity: .8 }
+.readout { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px }
+.readout b { font: 500 13.5px var(--f-mono) }
+.wcap { font-size: 13.5px; color: var(--muted) }
+
+/* question runner */
+.qbox { display: grid; gap: 14px }
+.qhead { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap }
+.qtext { font: 17px/1.55 var(--f-read); white-space: pre-line }
+.opts { display: grid; gap: 8px }
+.opt { text-align: left; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); cursor: pointer; display: flex; gap: 10px; align-items: baseline; min-height: 48px }
+.opt:hover:not([disabled]) { border-color: var(--accent) }
+.opt .k { font: 600 13px var(--f-mono); color: var(--muted) }
+.opt.right { border-color: var(--good); background: var(--good-soft) }
+.opt.wrong { border-color: var(--bad); background: var(--bad-soft) }
+.ans { display: flex; gap: 8px; flex-wrap: wrap }
+.ans input { flex: 1 1 160px; min-width: 0; padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); font: 16px var(--f-mono) }
+.fb { border-radius: 8px; padding: 12px 14px; display: grid; gap: 6px; font-size: 14.5px }
+.fb.good { background: var(--good-soft) }
+.fb.badf { background: var(--bad-soft) }
+.fb.hint { background: var(--accent-soft) }
+.sol { font: 14.5px/1.5 var(--f-mono); white-space: pre-wrap }
+.result { text-align: center; display: grid; gap: 8px; padding: 10px }
+.result .big { font: 700 40px var(--f-display) }
+.timer { font: 600 14px var(--f-mono) }
+.lock { display: grid; gap: 10px; justify-items: start }
+textarea { width: 100%; min-height: 120px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); font: 12.5px var(--f-mono) }
+.search { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card) }
+.gl { display: grid; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line) }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--card); padding: 10px 16px; border-radius: 8px; font-size: 14px; z-index: 20 }
+@media (max-width: 640px) {
+  nav.main { margin-left: 0; width: 100% }
+  nav.main a { padding: 6px 8px; font-size: 13.5px }
+  .prose { font-size: 16.5px }
+  .hero .stat { font-size: 36px }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important } }
+</style>
+
+<header class="top"><div class="top-in">
+  <a class="brand" href="#home">Margin Notes <small>economics · stats · finance</small></a>
+  <nav class="main" id="nav">
+    <a href="#home">Home</a><a href="#fundamentals">Fundamentals</a><a href="#review">Review</a>
+    <a href="#practice">Practice</a><a href="#course">Course</a><a href="#glossary">Glossary</a><a href="#progress">Progress</a>
+  </nav>
+  <span class="sync" id="sync">loading…</span>
+</div></header>
+<main><div class="wrap" id="app"><div class="panel">Loading the course…</div></div></main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+"use strict";
+/* ======================================================================
+   data + state
+   ====================================================================== */
+const S = { D: null, st: null, order: [], lessonIx: {}, unitIx: {}, session: null };
+const $ = (sel, el = document) => el.querySelector(sel);
+const h = (tag, attrs = {}, ...kids) => {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k === "text") el.textContent = v;
+    else if (k === "html") el.innerHTML = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  return el;
+};
+const today = () => new Date().toISOString().slice(0, 10);
+const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+function blankState() {
+  return { read: {}, stats: {}, cards: {}, exams: [], fund: { passed: {}, finals: [], final_passed: false }, updated: 0 };
+}
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
+
+/* ---------- storage: claude db (synced) or this browser ---------- */
+const Store = {
+  mode: "local", ref: null, writing: false, dirty: false, timer: null,
+  readLocal() { try { return JSON.parse(localStorage.getItem("mn-progress") || "null"); } catch { return null; } },
+  writeLocal(s) { try { localStorage.setItem("mn-progress", JSON.stringify(s)); } catch {} },
+  async init() {
+    let remote = null;
+    const local = this.readLocal();
+    try {
+      if (window.claude && typeof window.claude.use === "function") {
+        const timeout = (p) => Promise.race([p, new Promise((r) => setTimeout(() => r(null), 10000))]);
+        const [db, user] = await timeout(Promise.all([window.claude.use("db"), window.claude.use("user")])) || [];
+        const uid = user ? await user.id() : null;
+        if (db && uid) {
+          this.ref = db.doc("data/users/" + uid + "/progress");
+          const snap = await timeout(this.ref.get());
+          if (snap) { this.mode = "cloud"; if (snap.exists) remote = JSON.parse(snap.data().json || "null"); }
+        }
+      }
+    } catch (e) { this.mode = "local"; }
+    S.st = mergeStates(local, remote) || blankState();
+    this.writeLocal(S.st);
+    this.label();
+  },
+  label() {
+    $("#sync").textContent = this.mode === "cloud" ? "● synced to your account" : "● saved in this browser";
+    $("#sync").title = this.mode === "cloud" ? "Progress syncs between your devices" : "Open the published page to sync across devices";
+  },
+  save() {
+    S.st.updated = Date.now();
+    this.writeLocal(S.st);
+    if (this.mode !== "cloud") return;
+    this.dirty = true;
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => this.flush(), 1200);
+  },
+  async flush() {
+    if (!this.dirty || this.writing || !this.ref) return;
+    this.writing = true; this.dirty = false;
+    try { await this.ref.set({ json: JSON.stringify(S.st), updated: S.st.updated }); $("#sync").textContent = "● synced to your account"; }
+    catch (e) { $("#sync").textContent = "● sync paused — saved in this browser"; }
+    this.writing = false;
+    if (this.dirty) this.timer = setTimeout(() => this.flush(), 1200);
+  },
+};
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") Store.flush(); });
+
+function mergeStates(a, b) {
+  if (!a) return b; if (!b) return a;
+  const [base, other] = (a.updated || 0) >= (b.updated || 0) ? [a, b] : [b, a];
+  const m = JSON.parse(JSON.stringify(base));
+  m.fund = m.fund || { passed: {}, finals: [], final_passed: false };
+  const of = other.fund || {};
+  for (const [k, v] of Object.entries(of.passed || {})) if (!m.fund.passed[k]) m.fund.passed[k] = v;
+  m.fund.final_passed = !!(m.fund.final_passed || of.final_passed);
+  const seen = new Set((m.fund.finals || []).map((e) => e.date + e.right + e.total));
+  for (const e of of.finals || []) if (!seen.has(e.date + e.right + e.total)) m.fund.finals.push(e);
+  for (const [k, v] of Object.entries(other.read || {})) if (!m.read[k]) m.read[k] = v;
+  for (const [k, v] of Object.entries(other.cards || {})) if (!m.cards[k]) m.cards[k] = v;
+  for (const [k, v] of Object.entries(other.stats || {})) if (!m.stats[k]) m.stats[k] = v;
+  return m;
+}
+
+/* ---------- lookups ---------- */
+function indexData() {
+  for (const u of S.D.fund) for (const l of u.lessons) { S.order.push(l.id); S.lessonIx[l.id] = { ...l, unit: u }; }
+  for (const u of S.D.fund) S.unitIx[u.id] = u;
+  S.gLessonIx = {}; for (const m of S.D.general) for (const l of m.lessons) S.gLessonIx[l.id] = { ...l, module: m };
+  S.mcqById = {}; for (const q of S.D.questions) S.mcqById[q.id] = q;
+  S.fexById = {}; for (const l of Object.values(S.lessonIx)) for (const x of l.ex) S.fexById[x.id] = x;
+  S.bankByTopic = {};
+  for (const sec of ["fund", "general"]) for (const g of S.D.bank[sec]) { if (!S.bankByTopic[g.topic]) S.bankByTopic[g.topic] = { ...g, sec }; }
+}
+const fs = () => S.st.fund;
+const generalUnlocked = () => !!fs().final_passed;
+const isPassed = (id) => !!fs().passed[id];
+const isUnlocked = (id) => { const i = S.order.indexOf(id); return i === 0 || (i > 0 && isPassed(S.order[i - 1])); };
+const nextLesson = () => S.order.find((id) => !isPassed(id));
+const doneCount = () => S.order.filter(isPassed).length;
+const hid = (id) => id.replace(/\./g, "-");
+const unhid = (s) => s.replace(/-/g, ".");
+
+/* ---------- exercise normalisation ---------- */
+function itemFromFex(x, lessonId) {
+  if (x.kind === "mcq") return { type: "mcq", id: x.id, lesson: lessonId, q: x.q, options: x.options, correct: x.correct, traps: x.traps || {}, why: x.sol };
+  return { type: "num", id: x.id, lesson: lessonId, prompt: x.q, answer: x.answer, rel: x.rel, abs: x.abs, pct: x.pct, hint: x.hint || "Re-read the lesson's worked example.", sol: x.sol, traps: x.traps || [] };
+}
+function itemFromMcq(q) { return { type: "mcq", id: q.id, lesson: q.lesson, q: q.q, options: q.options, correct: q.answer, traps: q.traps || {}, why: q.why }; }
+function itemFromBank(g, rnd = Math.random) {
+  const e = g.items[Math.floor(rnd() * g.items.length)];
+  return { type: "num", id: "gen:" + g.topic, lesson: g.lesson, topic: g.topic, prompt: e.prompt, answer: e.answer, rel: e.rel, abs: e.abs, pct: e.pct, hint: e.hint, sol: e.sol, traps: e.traps };
+}
+
+/* ---------- answer checking (mirrors generators.Exercise.matches) ---------- */
+const isclose = (a, b, rel, abs) => Math.abs(a - b) <= Math.max(rel * Math.max(Math.abs(a), Math.abs(b)), abs);
+function matches(it, v, target = it.answer) {
+  if (isclose(v, target, it.rel, it.abs)) return true;
+  if (it.pct) for (const s of [v / 100, v * 100]) if (isclose(s, target, it.rel, 1e-9)) return true;
+  return false;
+}
+function parseNum(t) {
+  let c = String(t).replace(/[,€$\s]/g, "").replace(/−/g, "-");
+  const pct = c.endsWith("%"); c = c.replace(/%$/, "");
+  let v;
+  if (c.includes("/")) { const [a, b] = c.split("/"); v = parseFloat(a) / parseFloat(b); } else v = Number(c);
+  if (c === "" || !isFinite(v)) return null;
+  return pct ? v / 100 : v;
+}
+const fmt = (v, d = 4) => { const r = Number(v.toFixed(d)); return r.toLocaleString("en-US", { maximumFractionDigits: d }); };
+
+/* ---------- spaced repetition ---------- */
+function record(lessonId, cardId, ok) {
+  const st = S.st.stats[lessonId] || (S.st.stats[lessonId] = { right: 0, wrong: 0 });
+  st[ok ? "right" : "wrong"]++;
+  const c = S.st.cards[cardId] || { box: 1, due: today() };
+  c.box = ok ? Math.min(5, c.box + 1) : 1;
+  c.due = addDays(S.D.config.leitnerDays[c.box]);
+  c.lesson = lessonId;
+  S.st.cards[cardId] = c;
+  Store.save();
+}
+
+/* ======================================================================
+   question runner
+   ====================================================================== */
+function shuffle(a, rnd = Math.random) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+function runSession(host, items, opt) {
+  const o = Object.assign({ attempts: 2, hints: true, title: "Questions", record: true }, opt);
+  let i = 0, right = 0;
+  const box = h("div", { class: "panel qbox" });
+  host.replaceChildren(box);
+  const timerEl = o.deadline ? h("span", { class: "timer" }) : null;
+  let tick = null;
+  if (o.deadline) { const up = () => { const left = Math.max(0, o.deadline - Date.now()); timerEl.textContent = `${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, "0")} left`; if (!left) { clearInterval(tick); finish(true); } }; up(); tick = setInterval(up, 1000); }
+  function finish(timeUp) {
+    if (tick) clearInterval(tick);
+    if (S.session && S.session.box !== box) return;
+    S.session = null;
+    o.onDone && o.onDone(right, items.length, box, timeUp);
+  }
+  S.session = { box };
+  function show() {
+    if (!box.isConnected) { if (tick) clearInterval(tick); return; }
+    if (i >= items.length) return finish(false);
+    const it = items[i];
+    box.replaceChildren(h("div", { class: "qhead" },
+      h("span", { class: "eyebrow", text: `${o.title} · ${i + 1} of ${items.length}` }), timerEl,
+      h("span", { class: "chip", text: (it.type === "mcq" ? "concept" : "exercise") + " · " + it.lesson })),
+      h("div", { class: "bar" }, h("i", { style: `width:${(100 * i) / items.length}%` })));
+    (it.type === "mcq" ? showMcq : showNum)(it);
+  }
+  function next(ok) {
+    if (o.record) record(it_(i).lesson, it_(i).id, ok);
+    right += ok ? 1 : 0;
+    const nb = h("button", { class: "btn primary", text: i + 1 < items.length ? "Next question" : "See result", onclick: () => { i++; show(); } });
+    box.append(h("div", { class: "row" }, nb)); nb.focus();
+  }
+  const it_ = (k) => items[k];
+  function showMcq(it) {
+    box.append(h("div", { class: "qtext", text: it.q }));
+    const order = shuffle(it.options.map((_, k) => k));
+    const opts = h("div", { class: "opts" });
+    const btns = order.map((k, pos) => h("button", { class: "opt", onclick: () => pick(k) }, h("span", { class: "k", text: "abcdefgh"[pos] }), h("span", { text: it.options[k] })));
+    opts.append(...btns); box.append(opts);
+    function pick(k) {
+      btns.forEach((b) => b.disabled = true);
+      const ok = k === it.correct;
+      btns[order.indexOf(it.correct)].classList.add("right");
+      if (!ok) btns[order.indexOf(k)].classList.add("wrong");
+      const fb = h("div", { class: "fb " + (ok ? "good" : "badf") }, h("b", { text: ok ? "Correct." : "Not quite." }));
+      const trap = it.traps[String(k)];
+      if (!ok && trap) fb.append(h("div", {}, h("b", { text: "Why it's tempting but wrong: " }), trap));
+      if (it.why) fb.append(h("div", { text: it.why }));
+      box.append(fb); next(ok);
+    }
+  }
+  function showNum(it) {
+    box.append(h("div", { class: "qtext", text: it.prompt }));
+    const inp = h("input", { id: "answer", inputmode: "decimal", autocomplete: "off", placeholder: "Your answer (e.g. 12.5, -0.8, 25%, 3/4)", "aria-label": "Your answer" });
+    let tries = 0, done = false;
+    const check = h("button", { class: "btn primary", text: "Check" });
+    const hintB = o.hints ? h("button", { class: "btn", text: "Hint" }) : null;
+    const solB = h("button", { class: "btn", text: "Show solution" });
+    const fbHost = h("div", { class: "qbox" });
+    box.append(h("form", { class: "ans", onsubmit: (e) => { e.preventDefault(); submit(); } }, inp, check, hintB, solB), fbHost);
+    setTimeout(() => inp.focus(), 30);
+    if (hintB) hintB.onclick = () => fbHost.append(h("div", { class: "fb hint" }, h("b", { text: "Hint: " }), it.hint));
+    solB.onclick = () => end(false, "Solution shown — counted as not yet mastered.");
+    function submit() {
+      if (done) return;
+      const v = parseNum(inp.value);
+      if (v === null) { fbHost.replaceChildren(h("div", { class: "fb hint", text: "Type a number, for example 12.5, -0.8, 25% or 3/4." })); return; }
+      tries++;
+      if (matches(it, v)) return end(true, tries > 1 ? "Correct on the second try." : "Correct.");
+      let why = null; for (const [w, msg] of it.traps) if (matches(it, v, w)) { why = msg; break; }
+      if (tries < o.attempts) { fbHost.replaceChildren(h("div", { class: "fb badf" }, h("b", { text: "Not correct. " }), why ? "Likely mistake: " + why : "Try once more" + (o.hints ? " — or ask for a hint." : "."))); inp.select(); return; }
+      end(false, why ? "Likely mistake: " + why : "Not correct.");
+    }
+    function end(ok, msg) {
+      done = true; [inp, check, hintB, solB].forEach((b) => b && (b.disabled = true));
+      fbHost.replaceChildren(h("div", { class: "fb " + (ok ? "good" : "badf") }, h("b", { text: msg }),
+        h("div", {}, "Answer: ", h("b", { class: "num", text: fmt(it.answer) })),
+        h("div", { class: "sol", text: it.sol })));
+      next(ok);
+    }
+  }
+  show();
+}
+
+/* ======================================================================
+   charts
+   ====================================================================== */
+const NS = "http://www.w3.org/2000/svg";
+function sv(tag, attrs) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+function niceTicks(a, b, n = 5) {
+  const span = b - a; if (span <= 0) return [a];
+  const raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => span / s <= n) || 10 * mag;
+  const out = []; for (let v = Math.ceil(a / step) * step; v <= b + 1e-9; v += step) out.push(+v.toFixed(10)); return out;
+}
+class Plot {
+  constructor(o) {
+    this.o = Object.assign({ w: 520, h: 320, xl: "", yl: "", logy: false }, o);
+    this.m = { l: 54, r: 14, t: 14, b: 42 };
+    this.svg = sv("svg", { class: "plot", viewBox: `0 0 ${this.o.w} ${this.o.h}`, role: "img", "aria-label": this.o.aria || "chart" });
+  }
+  sx(v) { const { x } = this.o, m = this.m; return m.l + ((v - x[0]) / (x[1] - x[0])) * (this.o.w - m.l - m.r); }
+  sy(v) {
+    const { y } = this.o, m = this.m, H = this.o.h - m.t - m.b;
+    if (this.o.logy) { const a = Math.log10(y[0]), b = Math.log10(y[1]); return this.o.h - m.b - ((Math.log10(Math.max(v, y[0])) - a) / (b - a)) * H; }
+    return this.o.h - m.b - ((v - y[0]) / (y[1] - y[0])) * H;
+  }
+  clamp(v) { return Math.max(this.o.y[0], Math.min(this.o.y[1], v)); }
+  reset(o) {
+    if (o) Object.assign(this.o, o);
+    this.svg.replaceChildren(); const { x, y } = this.o, m = this.m, W = this.o.w, H = this.o.h;
+    const xt = niceTicks(x[0], x[1], 6);
+    const yt = this.o.logy ? (() => { const t = []; for (let p = Math.ceil(Math.log10(y[0])); p <= Math.log10(y[1]); p++) t.push(Math.pow(10, p)); return t; })() : niceTicks(y[0], y[1], 5);
+    for (const v of xt) { this.svg.append(sv("line", { class: "gridl", x1: this.sx(v), x2: this.sx(v), y1: m.t, y2: H - m.b })); this.text(v, null, fmtTick(v), { anchor: "middle", dy: 16, raw: true, xv: v }); }
+    for (const v of yt) { this.svg.append(sv("line", { class: "gridl", x1: m.l, x2: W - m.r, y1: this.sy(v), y2: this.sy(v) })); const t = sv("text", { x: m.l - 6, y: this.sy(v) + 4, "text-anchor": "end" }); t.textContent = fmtTick(v); this.svg.append(t); }
+    this.svg.append(sv("line", { class: "axis", x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b }), sv("line", { class: "axis", x1: m.l, x2: m.l, y1: m.t, y2: H - m.b }));
+    const xl = sv("text", { x: (m.l + W - m.r) / 2, y: H - 6, "text-anchor": "middle", class: "lab" }); xl.textContent = this.o.xl; this.svg.append(xl);
+    const yl = sv("text", { x: 12, y: (m.t + H - m.b) / 2, "text-anchor": "middle", class: "lab", transform: `rotate(-90 12 ${(m.t + H - m.b) / 2})` }); yl.textContent = this.o.yl; this.svg.append(yl);
+    return this;
+  }
+  text(xv, yv, s, opt = {}) {
+    if (!isFinite(xv) || (!opt.raw && !isFinite(yv))) return null;
+    const x = this.sx(xv), y = opt.raw ? this.o.h - this.m.b : this.sy(yv);
+    const t = sv("text", { x: x + (opt.dx || 0), y: y + (opt.dy || 0), "text-anchor": opt.anchor || "start", class: opt.cls || "" });
+    t.textContent = s; this.svg.append(t); return t;
+  }
+  path(pts, cls) { const d = pts.filter((p) => isFinite(p[1])).map((p, k) => (k ? "L" : "M") + this.sx(p[0]).toFixed(1) + " " + this.sy(this.clamp(p[1])).toFixed(1)).join(""); if (d) this.svg.append(sv("path", { d, class: cls })); }
+  fn(f, cls, a = this.o.x[0], b = this.o.x[1], n = 120) { const pts = []; for (let k = 0; k <= n; k++) { const x = a + ((b - a) * k) / n; pts.push([x, f(x)]); } this.path(pts, cls); }
+  poly(pts, cls) { if (pts.length < 3) return; this.svg.append(sv("polygon", { points: pts.map((p) => this.sx(p[0]).toFixed(1) + "," + this.sy(this.clamp(p[1])).toFixed(1)).join(" "), class: cls })); }
+  dot(x, y, label, opt = {}) { if (!isFinite(x) || !isFinite(y)) return; this.svg.append(sv("circle", { cx: this.sx(x), cy: this.sy(this.clamp(y)), r: 5, class: "dot" })); if (label) this.text(x, this.clamp(y), label, { dx: 8, dy: -8, cls: "lab", ...opt }); }
+  vline(x, y0, y1, cls = "dash") { if (![x, y0, y1].every(isFinite)) return; this.svg.append(sv("line", { x1: this.sx(x), x2: this.sx(x), y1: this.sy(this.clamp(y0)), y2: this.sy(this.clamp(y1)), class: cls })); }
+  hline(y, x0, x1, cls = "dash") { this.svg.append(sv("line", { x1: this.sx(x0), x2: this.sx(x1), y1: this.sy(this.clamp(y)), y2: this.sy(this.clamp(y)), class: cls })); }
+  bar(x0, x1, y, cls) { const top = this.sy(this.clamp(y)), base = this.sy(this.o.logy ? this.o.y[0] : Math.max(0, this.o.y[0])); this.svg.append(sv("rect", { x: this.sx(x0), y: Math.min(top, base), width: Math.max(0.5, this.sx(x1) - this.sx(x0)), height: Math.abs(base - top), class: cls })); }
+}
+function fmtTick(v) { const a = Math.abs(v); if (a >= 1e6) return (v / 1e6).toFixed(a >= 1e7 ? 0 : 1) + "m"; if (a >= 1e4) return (v / 1e3).toFixed(0) + "k"; if (a >= 1000) return v.toLocaleString("en-US"); return String(+v.toFixed(3)); }
+function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
+function gauss(r) { let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+function erf(x) { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; }
+const Phi = (z) => 0.5 * (1 + erf(z / Math.SQRT2));
+const phi = (z) => Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI);
+const comb = (n, k) => { let r = 1; for (let i = 1; i <= k; i++) r = (r * (n - k + i)) / i; return r; };
+const f2 = (v, d = 2) => (isFinite(v) ? Number(v).toLocaleString("en-US", { maximumFractionDigits: d, minimumFractionDigits: 0 }) : "–");
+
+/* each widget: title, caption, controls [id,label,min,max,step,value,unit], plots (count), draw(v, plots, out) */
+const WIDGETS = {
+  "supply-demand": {
+    title: "Supply, demand and a tax", caption: "Drag the curves. Shaded: consumer surplus (teal), producer surplus (orange), tax revenue (grey), deadweight loss (red).",
+    controls: [["dA", "Demand: choke price", 60, 160, 1, 120], ["sA", "Supply: lowest price", 0, 50, 1, 20], ["sB", "Supply slope", 0.3, 3, 0.1, 1], ["t", "Per-unit tax", 0, 40, 1, 0]],
+    plots: [{ x: [0, 120], y: [0, 170], xl: "Quantity", yl: "Price" }],
+    draw(v, [p], out) {
+      const dB = 1, Q0 = Math.max(0, (v.dA - v.sA) / (dB + v.sB)), P0 = v.dA - dB * Q0;
+      const Qt = Math.max(0, (v.dA - v.sA - v.t) / (dB + v.sB)), Pb = v.dA - dB * Qt, Ps = Pb - v.t;
+      p.reset();
+      p.poly([[0, v.dA], [0, Pb], [Qt, Pb]], "fd");
+      p.poly([[0, v.sA], [0, Ps], [Qt, Ps]], "fs");
+      if (v.t > 0) { p.poly([[0, Ps], [0, Pb], [Qt, Pb], [Qt, Ps]], "fk"); p.poly([[Qt, Pb], [Qt, Ps], [Q0, P0]], "fb"); }
+      p.fn((q) => v.dA - dB * q, "d"); p.fn((q) => v.sA + v.sB * q, "s");
+      if (v.t > 0) p.fn((q) => v.sA + v.t + v.sB * q, "dash");
+      p.text(110, v.dA - 110, "D", { cls: "lab" }); p.text(Math.min(110, (165 - v.sA) / v.sB), Math.min(165, v.sA + v.sB * 110), "S", { cls: "lab", dx: 4 });
+      p.dot(Qt, Pb, v.t ? `buyers pay ${f2(Pb, 1)}` : `P* ${f2(P0, 1)}`);
+      if (v.t) p.dot(Qt, Ps, `sellers keep ${f2(Ps, 1)}`, { dy: 16 });
+      const CS = 0.5 * (v.dA - Pb) * Qt, PS = 0.5 * (Ps - v.sA) * Qt, T = v.t * Qt, DWL = 0.5 * v.t * (Q0 - Qt);
+      out.innerHTML = `<span>Q <b>${f2(Qt, 1)}</b></span><span>CS <b>${f2(CS, 0)}</b></span><span>PS <b>${f2(PS, 0)}</b></span>` +
+        (v.t ? `<span>Tax revenue <b>${f2(T, 0)}</b></span><span>DWL <b>${f2(DWL, 0)}</b></span><span>Buyers' share of tax <b>${f2(100 * (Pb - P0) / v.t, 0)}%</b></span>` : `<span>Total surplus <b>${f2(CS + PS, 0)}</b></span>`);
+    },
+  },
+  "elasticity-revenue": {
+    title: "Elasticity along a straight demand line", caption: "Demand Q = 100 − b·P. The shaded rectangle is revenue P × Q. Watch revenue peak where |ε| = 1.",
+    controls: [["P", "Price", 1, 99, 1, 20], ["b", "Slope b", 1, 4, 0.5, 2]],
+    plots: [{ x: [0, 100], y: [0, 100], xl: "Quantity", yl: "Price" }, { x: [0, 100], y: [0, 1300], xl: "Price", yl: "Revenue" }],
+    draw(v, [p, r], out) {
+      const choke = 100 / v.b, P = Math.min(v.P, choke - 0.5), Q = 100 - v.b * P, e = -v.b * P / Q, TR = P * Q;
+      p.reset({ y: [0, Math.max(30, choke * 1.05)] }); p.poly([[0, 0], [0, P], [Q, P], [Q, 0]], "fd"); p.fn((q) => (100 - q) / v.b, "d");
+      p.dot(Q, P, `ε = ${f2(e, 2)}`);
+      const maxTR = 2500 / v.b; r.reset({ x: [0, choke], y: [0, maxTR * 1.1] }); r.fn((x) => x * (100 - v.b * x), "g", 0, choke); r.dot(P, TR, f2(TR, 0)); r.vline(choke / 2, 0, maxTR, "dash");
+      out.innerHTML = `<span>Q <b>${f2(Q, 1)}</b></span><span>ε <b>${f2(e, 2)}</b></span><span>Revenue <b>${f2(TR, 0)}</b></span><span><b>${Math.abs(e) > 1.001 ? "elastic: a price cut raises revenue" : Math.abs(e) < 0.999 ? "inelastic: a price rise raises revenue" : "unit elastic: revenue is at its maximum"}</b></span>`;
+    },
+  },
+  "cost-curves": {
+    title: "Cost curves", caption: "TC = FC + v·Q + c·Q². Marginal cost (orange) cuts average total cost (teal) at its minimum. Add a market price to see the profit-maximising Q.",
+    controls: [["FC", "Fixed cost FC", 0, 600, 10, 200], ["v", "Variable cost v", 0, 30, 1, 5], ["c", "Curvature c", 0.1, 2, 0.05, 0.5], ["P", "Market price", 0, 80, 1, 40]],
+    plots: [{ x: [0, 50], y: [0, 100], xl: "Quantity", yl: "€ per unit" }],
+    draw(v, [p], out) {
+      p.reset(); const atc = (q) => v.FC / q + v.v + v.c * q, avc = (q) => v.v + v.c * q, mc = (q) => v.v + 2 * v.c * q;
+      p.fn(atc, "d", 1, 50); p.fn(avc, "dash", 0, 50); p.fn(mc, "s", 0, 50);
+      const qm = Math.sqrt(v.FC / v.c); if (qm <= 50) p.dot(qm, atc(qm), `min ATC ${f2(atc(qm), 1)}`);
+      p.hline(v.P, 0, 50, "g"); const qs = Math.max(0, (v.P - v.v) / (2 * v.c)), prof = v.P * qs - (v.FC + v.v * qs + v.c * qs * qs);
+      if (qs > 0 && qs <= 50) { p.poly([[0, v.P], [qs, v.P], [qs, atc(qs)], [0, atc(qs)]], prof >= 0 ? "fg" : "fb"); p.dot(qs, v.P, "P = MC"); }
+      out.innerHTML = `<span>min ATC at Q <b>${f2(qm, 1)}</b></span><span>Q where P = MC <b>${f2(qs, 1)}</b></span><span>Profit <b>${f2(prof, 0)}</b></span><span>${v.P < v.v ? "<b>P below min AVC: shut down</b>" : ""}</span>`;
+    },
+  },
+  "break-even": {
+    title: "Break-even chart", caption: "Revenue (teal) vs total cost (orange). Green: profit, red: loss.",
+    controls: [["P", "Price", 10, 120, 1, 50], ["v", "Variable cost per unit", 0, 100, 1, 30], ["FC", "Fixed costs", 0, 30000, 500, 8000], ["Q", "Units sold", 0, 2000, 10, 600]],
+    plots: [{ x: [0, 2000], y: [0, 100000], xl: "Units", yl: "€" }],
+    draw(v, [p], out) {
+      const cm = v.P - v.v, qbe = cm > 0 ? v.FC / cm : Infinity, xmax = Math.max(400, Math.min(4000, isFinite(qbe) ? qbe * 2 : 2000, Math.max(v.Q * 1.2, 400)));
+      p.reset({ x: [0, xmax], y: [0, Math.max(v.P, v.FC / xmax + v.v) * xmax * 1.05] });
+      const R = (q) => v.P * q, C = (q) => v.FC + v.v * q;
+      const q = Math.min(v.Q, xmax);
+      if (isFinite(qbe) && q > qbe) p.poly([[qbe, R(qbe)], [q, R(q)], [q, C(q)]], "fg");
+      else p.poly([[0, C(0)], [q, C(q)], [q, R(q)], [0, 0]], "fb");
+      p.fn(R, "d"); p.fn(C, "s"); p.hline(v.FC, 0, xmax, "dash");
+      if (isFinite(qbe) && qbe <= xmax) p.dot(qbe, R(qbe), `break-even ${f2(qbe, 0)}`);
+      out.innerHTML = `<span>Contribution/unit <b>${f2(cm, 2)}</b></span><span>Break-even units <b>${isFinite(qbe) ? f2(qbe, 0) : "never"}</b></span><span>Profit at ${f2(v.Q, 0)} units <b>${f2(R(v.Q) - C(v.Q), 0)}</b></span>` + (isFinite(qbe) && v.Q > 0 ? `<span>Margin of safety <b>${f2(100 * (v.Q - qbe) / v.Q, 1)}%</b></span>` : "");
+    },
+  },
+  "compound-growth": {
+    title: "Compound vs simple growth", caption: "€1,000 growing at a constant rate. Compounding (teal) earns interest on interest; simple growth (orange) doesn't.",
+    controls: [["r", "Rate % per year", 0, 15, 0.5, 6], ["n", "Years", 1, 50, 1, 30]],
+    plots: [{ x: [0, 30], y: [0, 6000], xl: "Years", yl: "Value €" }],
+    draw(v, [p], out) {
+      const r = v.r / 100, comp = (t) => 1000 * Math.pow(1 + r, t), simp = (t) => 1000 * (1 + r * t);
+      p.reset({ x: [0, v.n], y: [0, Math.max(1100, comp(v.n) * 1.05)] }); p.fn(comp, "d"); p.fn(simp, "s");
+      const dbl = r > 0 ? Math.log(2) / Math.log(1 + r) : Infinity; if (dbl <= v.n) p.dot(dbl, 2000, `doubled after ${f2(dbl, 1)} y`);
+      out.innerHTML = `<span>Compound <b>€${f2(comp(v.n), 0)}</b></span><span>Simple <b>€${f2(simp(v.n), 0)}</b></span><span>Rule of 70 <b>${r ? f2(70 / v.r, 1) : "–"} y</b></span><span>Exact doubling <b>${isFinite(dbl) ? f2(dbl, 2) : "–"} y</b></span>`;
+    },
+  },
+  "discounting": {
+    title: "Present value of €1,000", caption: "How much a future €1,000 is worth today, by how far away it is. Higher rates bend the curve down faster.",
+    controls: [["r", "Discount rate %", 0, 20, 0.5, 6], ["n", "Received in year", 0, 30, 1, 10]],
+    plots: [{ x: [0, 30], y: [0, 1050], xl: "Years until received", yl: "PV €" }],
+    draw(v, [p], out) {
+      const pv = (t) => 1000 / Math.pow(1 + v.r / 100, t); p.reset(); p.fn(pv, "d"); p.dot(v.n, pv(v.n), `€${f2(pv(v.n), 0)}`); p.vline(v.n, 0, pv(v.n));
+      out.innerHTML = `<span>PV <b>€${f2(pv(v.n), 2)}</b></span><span>Discount factor <b>${f2(pv(v.n) / 1000, 4)}</b></span><span>Annuity of €1,000/yr for ${v.n} y <b>€${f2(v.r ? 1000 * (1 - Math.pow(1 + v.r / 100, -v.n)) / (v.r / 100) : 1000 * v.n, 0)}</b></span>`;
+    },
+  },
+  "histogram-skew": {
+    title: "Skew pulls the mean", caption: "2,000 simulated incomes. Increase the skew and watch the mean (teal) move away from the median (orange) into the long tail.",
+    controls: [["k", "Skewness", 0, 1.2, 0.05, 0.5]],
+    plots: [{ x: [0, 200], y: [0, 400], xl: "Value", yl: "Count" }],
+    draw(v, [p], out) {
+      const r = rng(7), xs = []; for (let i = 0; i < 2000; i++) { const z = gauss(r); xs.push(v.k > 0.001 ? 50 * Math.exp(v.k * z) / Math.exp(v.k * v.k / 2) + 10 : 60 + 18 * z); }
+      const s = xs.slice().sort((a, b) => a - b), mean = xs.reduce((a, b) => a + b) / xs.length, med = (s[999] + s[1000]) / 2;
+      const sd = Math.sqrt(xs.reduce((a, x) => a + (x - mean) ** 2, 0) / (xs.length - 1));
+      const bins = new Array(40).fill(0); for (const x of xs) { const b = Math.floor(x / 5); if (b >= 0 && b < 40) bins[b]++; }
+      p.reset({ y: [0, Math.max(...bins) * 1.1] }); bins.forEach((c, b) => p.bar(b * 5 + 0.3, b * 5 + 4.7, c, "bard"));
+      p.vline(mean, 0, Math.max(...bins), "d"); p.vline(med, 0, Math.max(...bins), "s");
+      p.text(mean, Math.max(...bins), "mean", { dx: 4, cls: "lab" }); p.text(med, Math.max(...bins) * 0.9, "median", { dx: 4, cls: "lab" });
+      out.innerHTML = `<span>Mean <b>${f2(mean, 1)}</b></span><span>Median <b>${f2(med, 1)}</b></span><span>SD <b>${f2(sd, 1)}</b></span><span>Mean − median <b>${f2(mean - med, 1)}</b></span>`;
+    },
+  },
+  "normal": {
+    title: "Normal probabilities", caption: "Shaded area = the probability. z = (x − μ)/σ.",
+    controls: [["mu", "Mean μ", 50, 150, 1, 100], ["sd", "SD σ", 5, 40, 1, 15], ["x", "Value x", 0, 200, 1, 125], ["mode", "Area: 0 below x · 1 above x · 2 within ±|x−μ|", 0, 2, 1, 0]],
+    plots: [{ x: [0, 200], y: [0, 0.085], xl: "x", yl: "density" }],
+    draw(v, [p], out) {
+      const f = (x) => phi((x - v.mu) / v.sd) / v.sd, z = (v.x - v.mu) / v.sd, d = Math.abs(v.x - v.mu);
+      p.reset({ y: [0, f(v.mu) * 1.15] });
+      const area = (a, b) => { const pts = [[a, 0]]; for (let k = 0; k <= 80; k++) { const x = a + ((b - a) * k) / 80; pts.push([x, f(x)]); } pts.push([b, 0]); p.poly(pts, "fd"); };
+      let prob;
+      if (v.mode === 0) { area(0, v.x); prob = Phi(z); } else if (v.mode === 1) { area(v.x, 200); prob = 1 - Phi(z); } else { area(v.mu - d, v.mu + d); prob = Phi(d / v.sd) - Phi(-d / v.sd); }
+      p.fn(f, "k"); p.vline(v.x, 0, f(v.x), "s"); p.text(v.x, f(v.x), `x = ${v.x}`, { dx: 4, dy: -6, cls: "lab" });
+      out.innerHTML = `<span>z <b>${f2(z, 2)}</b></span><span>${["P(X ≤ x)", "P(X ≥ x)", "P(within ±" + d + ")"][v.mode]} <b>${f2(prob, 4)}</b></span><span>95% range <b>${f2(v.mu - 1.96 * v.sd, 1)} – ${f2(v.mu + 1.96 * v.sd, 1)}</b></span>`;
+    },
+  },
+  "binomial": {
+    title: "Binomial and Poisson", caption: "Bars: binomial(n, p). Line: Poisson with the same mean λ = n·p — close when n is large and p small.",
+    controls: [["n", "Trials n", 1, 60, 1, 10], ["p", "Success probability p", 0.01, 0.99, 0.01, 0.2]],
+    plots: [{ x: [-0.5, 20.5], y: [0, 0.5], xl: "Number of successes k", yl: "P(X = k)" }],
+    draw(v, [p], out) {
+      const lam = v.n * v.p, kmax = Math.min(v.n, Math.ceil(lam + 4 * Math.sqrt(lam + 1) + 3));
+      const bin = (k) => comb(v.n, k) * Math.pow(v.p, k) * Math.pow(1 - v.p, v.n - k);
+      let po = Math.exp(-lam); const pois = []; for (let k = 0; k <= kmax; k++) { pois.push([k, po]); po = (po * lam) / (k + 1); }
+      let mx = 0; for (let k = 0; k <= kmax; k++) mx = Math.max(mx, bin(k), pois[k][1]);
+      p.reset({ x: [-0.5, kmax + 0.5], y: [0, mx * 1.15] }); for (let k = 0; k <= kmax; k++) p.bar(k - 0.35, k + 0.35, bin(k), "bard"); p.path(pois, "s");
+      out.innerHTML = `<span>Mean <b>${f2(lam, 2)}</b></span><span>SD <b>${f2(Math.sqrt(lam * (1 - v.p)), 3)}</b></span><span>P(X = 0) <b>${f2(bin(0), 4)}</b></span><span>Poisson P(0) <b>${f2(Math.exp(-lam), 4)}</b></span>`;
+    },
+  },
+  "clt": {
+    title: "Sample means become normal", caption: "Population: very skewed (exponential, mean 10). Each bar counts 3,000 sample means of size n. As n grows the histogram narrows (SE = σ/√n) and turns bell-shaped.",
+    controls: [["n", "Sample size n", 1, 100, 1, 5]],
+    plots: [{ x: [0, 30], y: [0, 1], xl: "Sample mean", yl: "Share of samples" }],
+    draw(v, [p], out) {
+      const r = rng(11 + v.n), means = []; for (let s = 0; s < 3000; s++) { let t = 0; for (let i = 0; i < v.n; i++) t += -10 * Math.log(1 - r()); means.push(t / v.n); }
+      const w = 0.5, bins = new Array(60).fill(0); for (const m of means) { const b = Math.floor(m / w); if (b >= 0 && b < 60) bins[b]++; }
+      const dens = bins.map((c) => c / 3000 / w), se = 10 / Math.sqrt(v.n);
+      p.reset({ y: [0, Math.max(...dens, phi(0) / se) * 1.1] }); dens.forEach((d, b) => p.bar(b * w, (b + 1) * w, d, "bard"));
+      if (v.n >= 2) p.fn((x) => phi((x - 10) / se) / se, "s");
+      const m = means.reduce((a, b) => a + b) / means.length, sd = Math.sqrt(means.reduce((a, x) => a + (x - m) ** 2, 0) / (means.length - 1));
+      out.innerHTML = `<span>Mean of means <b>${f2(m, 2)}</b></span><span>SD of means (simulated) <b>${f2(sd, 2)}</b></span><span>σ/√n (theory) <b>${f2(se, 2)}</b></span>`;
+    },
+  },
+  "scatter-regression": {
+    title: "Correlation and the least-squares line", caption: "Simulated data with a chosen correlation. The line minimises the sum of squared vertical distances.",
+    controls: [["rho", "True correlation", -1, 1, 0.05, 0.6], ["n", "Observations", 10, 200, 5, 60], ["seed", "New sample", 1, 20, 1, 1]],
+    plots: [{ x: [-3.5, 3.5], y: [-3.5, 3.5], xl: "x", yl: "y" }],
+    draw(v, [p], out) {
+      const r = rng(97 * v.seed + v.n), pts = []; for (let i = 0; i < v.n; i++) { const x = gauss(r), e = gauss(r); pts.push([x, v.rho * x + Math.sqrt(Math.max(0, 1 - v.rho * v.rho)) * e]); }
+      const mx = pts.reduce((a, q) => a + q[0], 0) / v.n, my = pts.reduce((a, q) => a + q[1], 0) / v.n;
+      let sxy = 0, sxx = 0, syy = 0; for (const [x, y] of pts) { sxy += (x - mx) * (y - my); sxx += (x - mx) ** 2; syy += (y - my) ** 2; }
+      const b = sxy / sxx, a = my - b * mx, rr = sxy / Math.sqrt(sxx * syy);
+      p.reset(); for (const [x, y] of pts) if (Math.abs(x) < 3.5 && Math.abs(y) < 3.5) p.svg.append(sv("circle", { cx: p.sx(x), cy: p.sy(y), r: 3, class: "bard" }));
+      p.fn((x) => a + b * x, "s");
+      out.innerHTML = `<span>r <b>${f2(rr, 3)}</b></span><span>slope b <b>${f2(b, 3)}</b></span><span>intercept a <b>${f2(a, 3)}</b></span><span>R² <b>${f2(rr * rr, 3)}</b></span>`;
+    },
+  },
+  "log-scale": {
+    title: "Linear vs log scale", caption: "The same constant-growth series. On a log scale it becomes a straight line: equal steps are equal ratios.",
+    controls: [["g", "Growth % per year", 1, 20, 0.5, 7], ["log", "Log scale (0 = off, 1 = on)", 0, 1, 1, 0]],
+    plots: [{ x: [0, 50], y: [1, 100000], xl: "Years", yl: "Value" }],
+    draw(v, [p], out) {
+      const f = (t) => 100 * Math.pow(1 + v.g / 100, t), top = f(50);
+      p.reset(v.log ? { logy: true, y: [10, Math.pow(10, Math.ceil(Math.log10(top)))] } : { logy: false, y: [0, top * 1.05] }); p.fn(f, "d");
+      out.innerHTML = `<span>Value after 50 years <b>${f2(top, 0)}</b></span><span>Multiplied by <b>${f2(top / 100, 1)}×</b></span>`;
+    },
+  },
+  "slope-line": {
+    title: "Intercept and slope", caption: "y = a + b·x. The triangle shows rise over run between x = 10 and x = 20.",
+    controls: [["a", "Intercept a", -50, 100, 1, 20], ["b", "Slope b", -5, 5, 0.1, 2]],
+    plots: [{ x: [0, 30], y: [-100, 200], xl: "x", yl: "y" }],
+    draw(v, [p], out) {
+      const f = (x) => v.a + v.b * x; p.reset(); p.fn(f, "d"); p.poly([[10, f(10)], [20, f(10)], [20, f(20)]], "fs");
+      p.dot(0, v.a, `a = ${v.a}`); out.innerHTML = `<span>rise <b>${f2(f(20) - f(10), 1)}</b></span><span>run <b>10</b></span><span>slope <b>${f2(v.b, 2)}</b></span><span>y at x = 25 <b>${f2(f(25), 1)}</b></span>`;
+    },
+  },
+  "monopoly": {
+    title: "Monopoly: MR = MC", caption: "Demand (teal), marginal revenue (dashed, twice as steep), marginal cost (orange). Green: profit; red: deadweight loss vs competition.",
+    controls: [["a", "Demand choke price", 60, 160, 1, 100], ["b", "Demand slope", 0.5, 3, 0.1, 1], ["mc", "Marginal cost", 0, 80, 1, 20]],
+    plots: [{ x: [0, 120], y: [0, 170], xl: "Quantity", yl: "Price" }],
+    draw(v, [p], out) {
+      const qm = Math.max(0, (v.a - v.mc) / (2 * v.b)), pm = v.a - v.b * qm, qc = Math.max(0, (v.a - v.mc) / v.b);
+      p.reset({ x: [0, Math.max(20, (v.a / v.b) * 1.05)] }); p.poly([[0, v.mc], [0, pm], [qm, pm], [qm, v.mc]], "fg"); p.poly([[qm, pm], [qm, v.mc], [qc, v.mc]], "fb");
+      p.fn((q) => v.a - v.b * q, "d"); p.fn((q) => v.a - 2 * v.b * q, "dash"); p.hline(v.mc, 0, 400, "s"); p.dot(qm, pm, `Pm ${f2(pm, 1)}`);
+      out.innerHTML = `<span>Qm <b>${f2(qm, 1)}</b></span><span>Pm <b>${f2(pm, 1)}</b></span><span>Profit <b>${f2((pm - v.mc) * qm, 0)}</b></span><span>DWL <b>${f2(0.5 * (pm - v.mc) * (qc - qm), 0)}</b></span><span>Lerner <b>${f2(pm ? (pm - v.mc) / pm : 0, 3)}</b></span>`;
+    },
+  },
+  "logit-shares": {
+    title: "Logit choice: price and market share", caption: "Three sellers of the same product. Share ∝ exp(−β·price). β is how price-sensitive buyers are.",
+    controls: [["p1", "Price A", 50, 200, 1, 100], ["p2", "Price B", 50, 200, 1, 120], ["p3", "Price C", 50, 200, 1, 150], ["beta", "β", 0, 0.1, 0.002, 0.02]],
+    plots: [{ x: [0, 3], y: [0, 1], xl: "Seller A · B · C", yl: "Share" }],
+    draw(v, [p], out) {
+      const w = [v.p1, v.p2, v.p3].map((x) => Math.exp(-v.beta * x)), s = w.map((x) => x / (w[0] + w[1] + w[2]));
+      p.reset(); s.forEach((x, k) => { p.bar(k + 0.2, k + 0.8, x, k ? "bars" : "bard"); p.text(k + 0.5, x, f2(100 * x, 1) + "%", { anchor: "middle", dy: -6, cls: "lab" }); });
+      out.innerHTML = `<span>Shares <b>${s.map((x) => f2(100 * x, 1) + "%").join(" · ")}</b></span><span>Revenue per 100 buyers <b>${f2(100 * (s[0] * v.p1 + s[1] * v.p2 + s[2] * v.p3), 0)}</b></span>`;
+    },
+  },
+  "bid-shading": {
+    title: "First-price auction: how much to shade", caption: "Rivals' values are uniform on [0, 100] and they bid (n−1)/n of their value. Curve: your expected surplus (v − b)·P(win with b).",
+    controls: [["n", "Number of bidders", 2, 12, 1, 3], ["v", "Your value", 1, 100, 1, 70]],
+    plots: [{ x: [0, 100], y: [0, 50], xl: "Your bid b", yl: "Expected surplus" }],
+    draw(v, [p], out) {
+      const top = ((v.n - 1) / v.n) * 100, win = (b) => Math.min(1, Math.pow(Math.max(0, b) / top, v.n - 1)), es = (b) => (v.v - b) * win(b);
+      let best = 0; for (let b = 0; b <= v.v; b += 0.1) if (es(b) > es(best)) best = b;
+      p.reset({ x: [0, 100], y: [0, Math.max(1, es(best) * 1.2)] }); p.fn(es, "d", 0, v.v); p.dot(best, es(best), `best ${f2(best, 1)}`); p.vline(v.v, 0, es(best) * 1.2, "dash");
+      out.innerHTML = `<span>Best bid <b>${f2(best, 1)}</b></span><span>(n−1)/n · v <b>${f2(((v.n - 1) / v.n) * v.v, 1)}</b></span><span>P(win) <b>${f2(win(best), 3)}</b></span><span>Expected surplus <b>${f2(es(best), 2)}</b></span>`;
+    },
+  },
+  "diversification": {
+    title: "Diversification", caption: "Two assets: A (6% return, σ 15%) and B (10%, σ 25%). The curve shows every mix from 100% A to 100% B. Lower correlation bends it left: less risk for the same return.",
+    controls: [["rho", "Correlation ρ", -1, 1, 0.05, 0.2], ["w", "Weight in A %", 0, 100, 5, 50]],
+    plots: [{ x: [0, 30], y: [4, 12], xl: "Risk σ %", yl: "Expected return %" }],
+    draw(v, [p], out) {
+      const port = (w) => { const s = Math.sqrt(Math.max(0, w * w * 225 + (1 - w) ** 2 * 625 + 2 * w * (1 - w) * v.rho * 375)); return [s, 6 * w + 10 * (1 - w)]; };
+      const pts = []; for (let k = 0; k <= 100; k++) pts.push(port(k / 100)); p.reset(); p.path(pts, "d"); p.path([port(1), port(0)], "dash");
+      const [s, r] = port(v.w / 100); p.dot(s, r, `${v.w}% A`);
+      let mn = 0; for (let k = 0; k <= 100; k++) if (port(k / 100)[0] < port(mn / 100)[0]) mn = k;
+      out.innerHTML = `<span>Portfolio σ <b>${f2(s, 2)}%</b></span><span>Return <b>${f2(r, 2)}%</b></span><span>Lowest-risk mix <b>${mn}% A, σ ${f2(port(mn / 100)[0], 2)}%</b></span>`;
+    },
+  },
+  "newsvendor": {
+    title: "How much stock for one selling season?", caption: "Demand ~ N(500, 100²). Curve: expected profit for each order quantity. The best order sits at the critical ratio c_u/(c_u + c_o).",
+    controls: [["p", "Selling price", 20, 120, 1, 60], ["c", "Unit cost", 5, 100, 1, 30], ["s", "Value of a leftover", 0, 100, 1, 0]],
+    plots: [{ x: [200, 800], y: [0, 20000], xl: "Order quantity", yl: "Expected profit €" }],
+    draw(v, [p], out) {
+      const c = Math.min(v.c, v.p - 1), s = Math.min(v.s, c), mu = 500, sd = 100;
+      const exLeft = (q) => { const z = (q - mu) / sd; return sd * (z * Phi(z) + phi(z)); };
+      const ep = (q) => (v.p - c) * q - (v.p - s) * exLeft(q);
+      const cu = v.p - c, co = c - s, cr = cu / (cu + co);
+      let qs = mu; { let lo = -5, hi = 5; for (let k = 0; k < 60; k++) { const m = (lo + hi) / 2; if (Phi(m) < cr) lo = m; else hi = m; } qs = mu + sd * lo; }
+      let mx = 0; for (let q = 200; q <= 800; q += 10) mx = Math.max(mx, ep(q));
+      p.reset({ y: [Math.min(0, ep(800)), mx * 1.15] }); p.fn(ep, "d"); p.dot(qs, ep(qs), `best ${f2(qs, 0)}`);
+      out.innerHTML = `<span>c_u <b>${f2(cu, 0)}</b></span><span>c_o <b>${f2(co, 0)}</b></span><span>Critical ratio <b>${f2(cr, 3)}</b></span><span>Best order <b>${f2(qs, 0)}</b></span><span>Expected profit <b>€${f2(ep(qs), 0)}</b></span>`;
+    },
+  },
+  "ppf": {
+    title: "Production possibilities frontier", caption: "Moving along the bowed-out frontier, each extra computer costs more wheat: increasing opportunity cost.",
+    controls: [["x", "Computers produced", 0, 99, 1, 40]],
+    plots: [{ x: [0, 110], y: [0, 220], xl: "Computers", yl: "Wheat" }],
+    draw(v, [p], out) {
+      const f = (x) => 200 * Math.sqrt(Math.max(0, 1 - (x / 100) ** 2)); p.reset(); p.poly([[0, 0], ...Array.from({ length: 101 }, (_, k) => [k, f(k)]), [100, 0]], "fd"); p.fn(f, "d", 0, 100);
+      const slope = (f(v.x + 1) - f(v.x)); p.dot(v.x, f(v.x), `(${v.x}, ${f2(f(v.x), 0)})`);
+      out.innerHTML = `<span>Wheat <b>${f2(f(v.x), 1)}</b></span><span>Opportunity cost of the next computer <b>${f2(-slope, 2)} wheat</b></span>`;
+    },
+  },
+  "price-profit": {
+    title: "Choosing a price", caption: "Demand Q = 200 − b·P. Profit = (P − cost)·Q − fixed costs. The best price balances margin per unit against units sold.",
+    controls: [["b", "Price sensitivity b", 1, 6, 0.1, 3], ["c", "Unit cost", 0, 40, 1, 10], ["F", "Fixed costs", 0, 2000, 50, 500]],
+    plots: [{ x: [0, 70], y: [-2000, 3000], xl: "Price", yl: "Profit" }],
+    draw(v, [p], out) {
+      const pr = (P) => (P - v.c) * Math.max(0, 200 - v.b * P) - v.F, choke = 200 / v.b, best = (choke + v.c) / 2;
+      p.reset({ x: [0, choke], y: [Math.min(-v.F, -200), Math.max(200, pr(best) * 1.2)] }); p.hline(0, 0, choke, "dash"); p.fn(pr, "g"); p.dot(best, pr(best), `best €${f2(best, 2)}`);
+      out.innerHTML = `<span>Best price <b>€${f2(best, 2)}</b></span><span>Units <b>${f2(200 - v.b * best, 1)}</b></span><span>Profit <b>€${f2(pr(best), 0)}</b></span>`;
+    },
+  },
+  "wtp-staircase": {
+    title: "Demand from willingness to pay", caption: "Eight buyers sorted by their maximum price form a staircase demand curve. Buyers with WTP ≥ price buy; shaded steps are their consumer surplus.",
+    controls: [["P", "Price", 0, 100, 1, 45]],
+    plots: [{ x: [0, 8], y: [0, 100], xl: "Buyers (sorted)", yl: "Willingness to pay" }],
+    draw(v, [p], out) {
+      const w = [92, 80, 71, 60, 52, 40, 31, 18]; p.reset(); let n = 0, cs = 0;
+      w.forEach((x, k) => { p.bar(k + 0.05, k + 0.95, x, "bard"); if (x >= v.P) { n++; cs += x - v.P; p.poly([[k + 0.05, v.P], [k + 0.95, v.P], [k + 0.95, x], [k + 0.05, x]], "fs"); } });
+      p.hline(v.P, 0, 8, "k");
+      out.innerHTML = `<span>Buyers <b>${n}</b></span><span>Revenue <b>${n * v.P}</b></span><span>Consumer surplus <b>${cs}</b></span>`;
+    },
+  },
+};
+
+function mountWidget(id) {
+  const W = WIDGETS[id]; if (!W) return null;
+  const v = {}; const plots = W.plots.map((o) => new Plot(o).reset());
+  const out = h("div", { class: "readout" });
+  const ctrls = h("div", { class: "ctrls" });
+  for (const [key, label, min, max, step, val] of W.controls) {
+    v[key] = val; const o = h("output", { text: f2(val, 3) });
+    const inp = h("input", { type: "range", id: `w-${id}-${key}`, min, max, step, value: val, "aria-label": label,
+      oninput: (e) => { v[key] = Number(e.target.value); o.textContent = f2(v[key], 3); W.draw(v, plots, out); } });
+    ctrls.append(h("div", { class: "ctrl" }, h("label", { for: `w-${id}-${key}` }, h("span", { text: label }), o), inp));
+  }
+  const el = h("section", { class: "widget" }, h("h3", {}, h("span", { class: "chip open", text: "Try it" }), W.title), h("div", { class: "wcap", text: W.caption }), ctrls,
+    h("div", { class: "plots" }, ...plots.map((p) => p.svg)), out);
+  W.draw(v, plots, out);
+  return el;
+}
+
+/* ======================================================================
+   views
+   ====================================================================== */
+/* Markdown subset used by the lesson files: headings, paragraphs, lists,
+   fenced code, tables, blockquotes, **bold**, *italic*, `code`, [links](url). */
+const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function inline(t) {
+  const codes = [];
+  t = t.replace(/`([^`]+)`/g, (_, c) => { codes.push(c); return "\u0000" + (codes.length - 1) + "\u0000"; });
+  t = esc(t)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[\s(])\*([^*\s][^*]*?)\*(?=[\s.,;:!?)]|$)/g, "$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\\([*_#\[\]()])/g, "$1");
+  return t.replace(/\u0000(\d+)\u0000/g, (_, i) => "<code>" + esc(codes[+i]) + "</code>");
+}
+function mdHtml(src) {
+  const L = src.replace(/\r/g, "").split("\n"), out = [];
+  let i = 0;
+  const isBlockStart = (l) => /^(#{1,4} |```|> ?|\|)/.test(l) || /^\s*([-*]|\d+\.) /.test(l);
+  while (i < L.length) {
+    const l = L[i];
+    if (!l.trim()) { i++; continue; }
+    if (l.startsWith("```")) { const buf = []; i++; while (i < L.length && !L[i].startsWith("```")) buf.push(L[i++]); i++; out.push("<pre><code>" + esc(buf.join("\n")) + "</code></pre>"); continue; }
+    const hm = l.match(/^(#{1,4}) (.*)$/); if (hm) { const n = Math.min(4, hm[1].length + 1); out.push(`<h${n}>${inline(hm[2])}</h${n}>`); i++; continue; }
+    if (l.startsWith(">")) { const buf = []; while (i < L.length && L[i].startsWith(">")) buf.push(L[i++].replace(/^> ?/, "")); out.push("<blockquote>" + mdHtml(buf.join("\n")) + "</blockquote>"); continue; }
+    if (l.startsWith("|")) {
+      const rows = []; while (i < L.length && L[i].startsWith("|")) rows.push(L[i++]);
+      const cells = (r) => r.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      const body = rows.filter((r, k) => !(k === 1 && /^\|[\s:|-]+\|?$/.test(r.trim())));
+      out.push("<table><thead><tr>" + cells(body[0]).map((c) => `<th>${inline(c)}</th>`).join("") + "</tr></thead><tbody>" +
+        body.slice(1).map((r) => "<tr>" + cells(r).map((c) => `<td>${inline(c)}</td>`).join("") + "</tr>").join("") + "</tbody></table>");
+      continue;
+    }
+    const lm = l.match(/^\s*([-*]|\d+\.) /);
+    if (lm) {
+      const ordered = /\d/.test(lm[1]), items = [];
+      while (i < L.length && L[i].trim()) {
+        const m = L[i].match(/^\s*([-*]|\d+\.) (.*)$/);
+        if (m) items.push(m[2]); else if (items.length) items[items.length - 1] += " " + L[i].trim(); else break;
+        i++;
+        if (i < L.length && !L[i].trim() && i + 1 < L.length && /^\s*([-*]|\d+\.) /.test(L[i + 1])) i++;
+      }
+      out.push(`<${ordered ? "ol" : "ul"}>` + items.map((t) => `<li>${inline(t)}</li>`).join("") + `</${ordered ? "ol" : "ul"}>`);
+      continue;
+    }
+    const buf = [l]; i++;
+    while (i < L.length && L[i].trim() && !isBlockStart(L[i])) buf.push(L[i++]);
+    out.push("<p>" + inline(buf.join(" ")) + "</p>");
+  }
+  return out.join("\n");
+}
+function md(text) {
+  const el = h("div", { class: "prose", html: mdHtml(text) });
+  el.querySelectorAll("table").forEach((t) => { const b = h("div", { class: "tablebox" }); t.replaceWith(b); b.append(t); });
+  return el;
+}
+function setNav(route) { document.querySelectorAll("#nav a").forEach((a) => { if (a.getAttribute("href") === "#" + route) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); }); }
+function view(...kids) { const app = $("#app"); app.replaceChildren(...kids); window.scrollTo(0, 0); }
+function dueCards() {
+  const t = today();
+  return Object.entries(S.st.cards).filter(([id, c]) => c.due <= t && c.box < 5 && resolveCard(id)).map(([id]) => id);
+}
+function resolveCard(id) {
+  if (S.fexById[id]) { const x = S.fexById[id]; return itemFromFex(x, id.split("-")[0]); }
+  if (generalUnlocked() && S.mcqById[id]) return itemFromMcq(S.mcqById[id]);
+  if (id.startsWith("gen:")) { const g = S.bankByTopic[id.slice(4)]; if (g && (g.sec === "fund" || generalUnlocked())) return itemFromBank(g); }
+  return null;
+}
+function lockedPanel() {
+  const nxt = nextLesson();
+  return h("div", { class: "panel lock" }, h("span", { class: "eyebrow", text: "Locked" }), h("h2", { text: "Finish Fundamentals first" }),
+    h("p", { class: "muted", text: `The general course opens after you pass the Fundamentals final with at least ${S.D.config.finalPass}/30. You have passed ${doneCount()} of ${S.order.length} lessons.` }),
+    nxt ? h("a", { class: "btn primary", href: "#lesson-" + hid(nxt), text: `Continue: ${nxt} ${S.lessonIx[nxt].title}` }) : h("a", { class: "btn primary", href: "#final", text: "Take the Fundamentals final" }));
+}
+
+function viewHome() {
+  const nxt = nextLesson(), done = doneCount(), due = dueCards().length;
+  const best = Math.max(-1, ...fs().finals.map((e) => e.grade));
+  const cont = nxt ? h("a", { class: "btn primary big", href: "#lesson-" + hid(nxt) }, `Continue · ${nxt} ${S.lessonIx[nxt].title}`)
+    : fs().final_passed ? h("a", { class: "btn primary big", href: "#course", text: "Open the general course" }) : h("a", { class: "btn primary big", href: "#final", text: "Take the Fundamentals final" });
+  view(
+    h("section", { class: "grid2" },
+      h("div", { class: "panel hero" }, h("span", { class: "eyebrow", text: "Fundamentals" }),
+        h("div", { class: "row" }, h("span", { class: "stat", text: `${done}` }), h("span", { class: "muted", text: `of ${S.order.length} lessons passed` })),
+        h("div", { class: "bar" }, h("i", { style: `width:${(100 * done) / S.order.length}%` })), cont,
+        h("span", { class: "muted", text: fs().final_passed ? "Final passed — the general course is open." : best >= 0 ? `Best final so far: ${f2(best, 0)}/30 (need ${S.D.config.finalPass}).` : "Lessons unlock one by one; pass each mastery check with 75 % or more." })),
+      h("div", { class: "panel hero" }, h("span", { class: "eyebrow", text: "Quick review" }),
+        h("div", { class: "row" }, h("span", { class: "stat", text: String(due) }), h("span", { class: "muted", text: due === 1 ? "item due today" : "items due today" })),
+        h("a", { class: "btn big" + (due ? " primary" : ""), href: "#review", text: due ? "Review now (about 5 minutes)" : "Quick drill on what you've learned" }),
+        h("span", { class: "muted", text: "Missed items come back after 0, 1, 3, 7 and 16 days. Made for a phone." }))),
+    h("section", { class: "panel" }, h("div", { class: "row", style: "justify-content:space-between" }, h("h2", { text: "Units" }), h("a", { href: "#fundamentals", text: "All units →" })),
+      h("div", { style: "height:12px" }), unitGrid()),
+    h("section", { class: "panel row", style: "justify-content:space-between" },
+      h("div", {}, h("h2", { text: "General course" }), h("span", { class: "muted", text: "Microeconomics · Game theory & auctions · Accounting & finance · Macroeconomics — 30 lessons." })),
+      generalUnlocked() ? h("a", { class: "btn primary", href: "#course", text: "Open" }) : h("span", { class: "chip", text: "🔒 after the Fundamentals final" })));
+}
+function unitGrid() {
+  return h("div", { class: "units" }, ...S.D.fund.map((u) => {
+    const k = u.lessons.filter((l) => isPassed(l.id)).length, open = isUnlocked(u.lessons[0].id);
+    return h("a", { class: `unit track-${u.track.replace(/[^A-Za-z]+/g, "-")}` + (open ? "" : " locked"), href: "#unit-" + u.id },
+      h("span", { class: "tr", text: `${u.id} · ${u.track}` }), h("span", { class: "t", text: u.title }),
+      h("div", { class: "bar" }, h("i", { style: `width:${(100 * k) / u.lessons.length}%` })),
+      h("span", { class: "muted", text: k === u.lessons.length ? "✓ complete" : open ? `${k}/${u.lessons.length} passed` : "🔒 locked" }));
+  }));
+}
+function viewFundamentals() { view(h("section", { class: "panel" }, h("span", { class: "eyebrow", text: "Start here" }), h("h1", { text: "Fundamentals" }),
+  h("p", { class: "muted", text: "200 micro-lessons from high-school level to first-year university: statistics, economic reasoning, accounting and finance. Lessons open in order; the final exam unlocks the general course." }),
+  h("div", { class: "row" }, h("a", { class: "btn primary", href: nextLesson() ? "#lesson-" + hid(nextLesson()) : "#final", text: nextLesson() ? "Continue" : "Final exam" }), h("a", { class: "btn", href: "#final", text: "Final exam" }))), h("section", {}, unitGrid())); }
+function viewUnit(uid) {
+  const u = S.unitIx[uid]; if (!u) return viewHome();
+  view(h("section", { class: "panel read" }, h("span", { class: "eyebrow", text: `${u.id} · ${u.track}` }), h("h1", { text: u.title }), h("div", { style: "height:10px" }),
+    h("ul", { class: "lessons" }, ...u.lessons.map((l) => h("li", {}, isUnlocked(l.id)
+      ? h("a", { href: "#lesson-" + hid(l.id) }, h("span", { class: "id", text: l.id }), h("span", { style: "flex:1", text: l.title }), isPassed(l.id) ? h("span", { class: "chip ok", text: "passed" }) : h("span", { class: "chip open", text: "open" }))
+      : h("span", {}, h("span", { class: "id", text: l.id }), h("span", { style: "flex:1", text: l.title }), h("span", { class: "chip", text: "🔒" })))))));
+}
+function viewLesson(id) {
+  const l = S.lessonIx[id]; if (!l) return viewHome();
+  if (!isUnlocked(id)) { const n = nextLesson(); return view(h("div", { class: "panel lock read" }, h("h2", { text: `🔒 ${id} is locked` }), h("p", { class: "muted", text: "Lessons open in order." }), h("a", { class: "btn primary", href: "#lesson-" + hid(n), text: `Go to ${n} ${S.lessonIx[n].title}` }))); }
+  const i = S.order.indexOf(id), prev = S.order[i - 1], nx = S.order[i + 1];
+  const checkHost = h("div", {});
+  const startBtn = h("button", { class: "btn primary big", text: isPassed(id) ? "Retake the mastery check" : `Take the mastery check (${l.ex.length} questions)`, onclick: () => startCheck() });
+  function startCheck() {
+    const items = shuffle(l.ex.map((x) => itemFromFex(x, id)));
+    runSession(checkHost, items, { title: `Mastery check ${id}`, onDone: (right, n, box) => {
+      const need = Math.ceil(S.D.config.passShare * n), ok = right >= need;
+      if (ok && !isPassed(id)) { fs().passed[id] = today(); Store.save(); }
+      const nn = nextLesson();
+      box.replaceChildren(h("div", { class: "result" }, h("span", { class: "big", text: `${right}/${n}` }),
+        h("b", { text: ok ? `${id} passed.` : `Need ${need} of ${n} — re-read and try again.` }),
+        h("div", { class: "row", style: "justify-content:center" }, ok && nn ? h("a", { class: "btn primary", href: "#lesson-" + hid(nn), text: `Next: ${nn} ${S.lessonIx[nn].title}` }) : null,
+          ok && !nn ? h("a", { class: "btn primary", href: "#final", text: "Take the Fundamentals final" }) : null,
+          h("button", { class: "btn", text: "Retake", onclick: startCheck }))));
+    } });
+    checkHost.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  S.st.read[id] = S.st.read[id] || today(); Store.save();
+  view(h("article", { class: "read", style: "display:grid;gap:16px" },
+    h("div", {}, h("a", { href: "#unit-" + l.unit.id, class: "eyebrow", text: `${l.unit.id} · ${l.unit.title}` }), h("h1", { text: `${id} ${l.title}` }), isPassed(id) ? h("span", { class: "chip ok", text: "passed" }) : null),
+    md(l.body), ...l.widgets.map(mountWidget).filter(Boolean), checkHost, startBtn,
+    h("div", { class: "row", style: "justify-content:space-between" }, prev ? h("a", { class: "btn", href: "#lesson-" + hid(prev), text: `← ${prev}` }) : h("span"), nx && isUnlocked(nx) ? h("a", { class: "btn", href: "#lesson-" + hid(nx), text: `${nx} →` }) : h("span"))));
+}
+
+function viewPractice() {
+  const passedUnits = S.D.fund.filter((u) => isUnlocked(u.lessons[0].id));
+  const sel = h("select", { id: "practice-scope", class: "search" },
+    h("option", { value: "all", text: "Everything unlocked" }), ...passedUnits.map((u) => h("option", { value: u.id, text: `${u.id} · ${u.title}` })),
+    ...(generalUnlocked() ? S.D.general.map((m) => h("option", { value: m.id, text: `${m.id} · ${m.title} (general course)` })) : []));
+  const host = h("div", {});
+  const go = h("button", { class: "btn primary", text: "Start 10 exercises", onclick: () => {
+    const scope = sel.value;
+    let pool = S.D.bank.fund.filter((g) => isUnlocked(g.lesson) || isPassed(g.lesson));
+    if (scope.startsWith("F")) pool = pool.filter((g) => g.lesson.split(".")[0] === scope);
+    else if (scope.startsWith("M")) pool = S.D.bank.general.filter((g) => g.lesson.split(".")[0] === scope.slice(1));
+    else if (generalUnlocked()) pool = pool.concat(S.D.bank.general);
+    if (!pool.length) return host.replaceChildren(h("div", { class: "panel muted", text: "Nothing unlocked here yet — practice opens with each lesson." }));
+    const items = Array.from({ length: 10 }, () => itemFromBank(pool[Math.floor(Math.random() * pool.length)]));
+    runSession(host, items, { title: "Practice", onDone: (r, n, box) => box.replaceChildren(h("div", { class: "result" }, h("span", { class: "big", text: `${r}/${n}` }), h("button", { class: "btn primary", text: "Another 10", onclick: () => go.click() }))) });
+  } });
+  view(h("section", { class: "panel read", style: "display:grid;gap:12px" }, h("h1", { text: "Practice" }), h("p", { class: "muted", text: `Fresh numeric exercises with hints, worked solutions and diagnosis of typical mistakes — drawn from ${S.D.bank.fund.length + S.D.bank.general.length} exercise types.` }), sel, go), h("div", { class: "read" }, host));
+}
+
+function viewReview() {
+  const due = shuffle(dueCards()).slice(0, 12);
+  const host = h("div", { class: "read" });
+  let items = due.map(resolveCard).filter(Boolean), label = "Review";
+  if (!items.length) {
+    label = "Quick drill";
+    const pool = S.D.bank.fund.filter((g) => isPassed(g.lesson));
+    const mcq = S.order.filter(isPassed).flatMap((id) => S.lessonIx[id].ex.filter((x) => x.kind === "mcq").map((x) => itemFromFex(x, id)));
+    items = shuffle([...mcq.slice(-40), ...pool.map((g) => itemFromBank(g))]).slice(0, 8);
+  }
+  view(h("section", { class: "panel read" }, h("h1", { text: label }), h("p", { class: "muted", text: due.length ? `${due.length} item(s) due — wrong answers come back tomorrow, right ones later.` : "Nothing due. Here's a short drill on lessons you've passed." })), host);
+  if (!items.length) return host.append(h("div", { class: "panel muted", text: "Pass your first lesson to start building a review deck." }));
+  runSession(host, items, { title: label, onDone: (r, n, box) => box.replaceChildren(h("div", { class: "result" }, h("span", { class: "big", text: `${r}/${n}` }), h("b", { text: "Done for now." }), h("a", { class: "btn primary", href: "#home", text: "Back home" }))) });
+}
+
+function viewFinal() {
+  const cfg = S.D.config;
+  if (nextLesson()) return view(h("section", { class: "panel read lock" }, h("h1", { text: "Fundamentals final" }), h("p", { class: "muted", text: `Opens when all ${S.order.length} lessons are passed. You have ${doneCount()}.` }), h("a", { class: "btn primary", href: "#lesson-" + hid(nextLesson()), text: "Continue lessons" })));
+  const host = h("div", { class: "read" });
+  view(h("section", { class: "panel read", style: "display:grid;gap:10px" }, h("h1", { text: "Fundamentals final" }),
+    h("p", { text: `${cfg.finalQuestions} questions from every unit, ${cfg.finalMinutes} minutes, graded out of 30. ${cfg.finalPass} or more unlocks the general course. One attempt per numeric answer, no hints.` }),
+    h("button", { class: "btn primary big", text: "Start the clock", onclick: (e) => { e.target.hidden = true; startFinal(host); } }),
+    fs().finals.length ? h("span", { class: "muted", text: "Previous attempts: " + fs().finals.map((x) => `${x.date} ${f2(x.grade, 0)}/30`).join(", ") }) : null), host);
+}
+function startFinal(host) {
+  const cfg = S.D.config, byUnit = {};
+  for (const u of S.D.fund) byUnit[u.id] = u.lessons.flatMap((l) => l.ex.map((x) => () => itemFromFex(x, l.id)));
+  for (const g of S.D.bank.fund) byUnit[g.lesson.split(".")[0]].push(() => itemFromBank(g));
+  const units = shuffle(Object.keys(byUnit)), items = [];
+  for (let k = 0; items.length < cfg.finalQuestions; k++) { const pool = byUnit[units[k % units.length]]; items.push(pool[Math.floor(Math.random() * pool.length)]()); }
+  runSession(host, shuffle(items), { title: "Final", attempts: 1, hints: false, deadline: Date.now() + cfg.finalMinutes * 60000, onDone: (r, n, box, timeUp) => {
+    const grade = (30 * r) / n, pass = grade >= cfg.finalPass;
+    fs().finals.push({ date: today(), right: r, total: n, grade: Math.round(grade * 10) / 10 }); if (pass) fs().final_passed = true; Store.save();
+    box.replaceChildren(h("div", { class: "result" }, h("span", { class: "big", text: r === n ? "30 e lode" : `${f2(grade, 0)}/30` }),
+      h("b", { text: (timeUp ? "Time's up. " : "") + (pass ? "Passed — the general course is unlocked." : "Not passed yet. Review weak units and try again.") }),
+      h("a", { class: "btn primary", href: pass ? "#course" : "#review", text: pass ? "Open the general course" : "Go to review" })));
+  } });
+}
+
+function viewCourse() {
+  if (!generalUnlocked()) return view(lockedPanel());
+  view(h("section", { class: "panel" }, h("h1", { text: "General course" }), h("p", { class: "muted", text: "Four modules at first-semester university level. Every lesson has check questions; quizzes and timed exams below." }),
+    h("div", { class: "row" }, h("a", { class: "btn primary", href: "#quiz", text: "Quiz (10 questions)" }), h("a", { class: "btn", href: "#exam", text: "Timed exam" }), h("a", { class: "btn", href: "#map", text: "Mechanics map" }))),
+    ...S.D.general.map((m) => h("section", { class: "panel" }, h("span", { class: "eyebrow", text: m.id }), h("h2", { text: m.title }),
+      h("ul", { class: "lessons" }, ...m.lessons.map((l) => h("li", {}, h("a", { href: "#glesson-" + hid(l.id) }, h("span", { class: "id", text: l.id }), h("span", { style: "flex:1", text: l.title }), S.st.read[l.id] ? h("span", { class: "chip ok", text: "read" }) : null)))))));
+}
+function viewGLesson(id) {
+  if (!generalUnlocked()) return view(lockedPanel());
+  const l = S.gLessonIx[id]; if (!l) return viewCourse();
+  const qs = S.D.questions.filter((q) => q.lesson === id).map(itemFromMcq);
+  const host = h("div", {});
+  S.st.read[id] = S.st.read[id] || today(); Store.save();
+  view(h("article", { class: "read", style: "display:grid;gap:16px" }, h("a", { href: "#course", class: "eyebrow", text: `${l.module.id} · ${l.module.title}` }), h("h1", { text: `${id} ${l.title}` }),
+    md(l.body), ...l.widgets.map(mountWidget).filter(Boolean), host,
+    h("button", { class: "btn primary big", text: `Check your understanding (${qs.length} questions)`, onclick: (e) => { e.target.hidden = true; runSession(host, shuffle(qs), { title: "Check " + id, onDone: (r, n, box) => box.replaceChildren(h("div", { class: "result" }, h("span", { class: "big", text: `${r}/${n}` }), h("a", { class: "btn", href: "#practice", text: "Practice exercises" }))) }); } })));
+}
+function viewQuiz() {
+  if (!generalUnlocked()) return view(lockedPanel());
+  const host = h("div", { class: "read" }); view(h("section", { class: "panel read" }, h("h1", { text: "Quiz" })), host);
+  runSession(host, shuffle(S.D.questions).slice(0, 10).map(itemFromMcq), { title: "Quiz", onDone: (r, n, box) => box.replaceChildren(h("div", { class: "result" }, h("span", { class: "big", text: `${r}/${n}` }), h("a", { class: "btn primary", href: "#quiz", onclick: () => setTimeout(route, 0), text: "Another quiz" }))) });
+}
+function viewExam() {
+  if (!generalUnlocked()) return view(lockedPanel());
+  const host = h("div", { class: "read" });
+  view(h("section", { class: "panel read", style: "display:grid;gap:10px" }, h("h1", { text: "Timed exam" }), h("p", { text: "20 questions (10 concept, 10 numeric), 60 minutes, graded out of 30, pass at 18." }),
+    h("button", { class: "btn primary big", text: "Start the clock", onclick: (e) => { e.target.hidden = true;
+      const items = shuffle([...shuffle(S.D.questions).slice(0, 10).map(itemFromMcq), ...Array.from({ length: 10 }, () => itemFromBank(S.D.bank.general[Math.floor(Math.random() * S.D.bank.general.length)]))]);
+      runSession(host, items, { title: "Exam", attempts: 1, hints: false, deadline: Date.now() + 3600000, onDone: (r, n, box) => { const g = (30 * r) / n; S.st.exams.push({ date: today(), right: r, total: n, grade: Math.round(g * 10) / 10 }); Store.save();
+        box.replaceChildren(h("div", { class: "result" }, h("span", { class: "big", text: r === n ? "30 e lode" : `${f2(g, 0)}/30` }), h("b", { text: g >= 18 ? "Passed." : "Not passed." }))); } }); } })), host);
+}
+function viewGlossary() {
+  const list = h("div", {}), q = h("input", { id: "glossary-search", class: "search", placeholder: "Search 200+ terms (e.g. elasticity, NPV, p-value)", "aria-label": "Search the glossary" });
+  const mapByTerm = {}; for (const m of S.D.map) for (const t of m.terms || []) (mapByTerm[t] = mapByTerm[t] || []).push(m);
+  const render = () => { const s = q.value.trim().toLowerCase(); list.replaceChildren(...S.D.glossary.filter((g) => !s || g.term.toLowerCase().includes(s) || g.definition.toLowerCase().includes(s)).sort((a, b) => a.term.localeCompare(b.term)).slice(0, 80).map((g) =>
+    h("div", { class: "gl" }, h("div", { class: "row" }, h("b", { text: g.term }), h("span", { class: "chip", text: "lesson " + g.lesson })), h("div", { text: g.definition }),
+      g.formula ? h("div", { class: "num", text: g.formula }) : null, g.example ? h("div", { class: "muted", text: "Example: " + g.example }) : null,
+      ...(generalUnlocked() ? (mapByTerm[g.term] || []).map((m) => h("div", { class: "muted", text: `In the simulator: ${m.mechanic} (${m.where})` })) : [])))); };
+  q.oninput = render; render();
+  view(h("section", { class: "panel read", style: "display:grid;gap:12px" }, h("h1", { text: "Glossary" }), q, list));
+}
+function viewMap() {
+  if (!generalUnlocked()) return view(lockedPanel());
+  view(h("section", { class: "panel" }, h("h1", { text: "Mechanics map" }), h("p", { class: "muted", text: "Where each concept appears in the DME simulator — facts about the mechanics only, never what to do about them." }),
+    h("div", { class: "tablebox prose" }, h("table", {}, h("thead", {}, h("tr", {}, h("th", { text: "Concept" }), h("th", { text: "Mechanic" }), h("th", { text: "Where" }))),
+      h("tbody", {}, ...S.D.map.map((m) => h("tr", {}, h("td", { text: `${m.concept} (${m.lesson})` }), h("td", { text: m.mechanic }), h("td", { class: "num", text: m.where }))))))));
+}
+function viewProgress() {
+  const right = Object.values(S.st.stats).reduce((a, s) => a + s.right, 0), wrong = Object.values(S.st.stats).reduce((a, s) => a + s.wrong, 0);
+  const boxes = [1, 2, 3, 4, 5].map((b) => Object.values(S.st.cards).filter((c) => c.box === b).length);
+  const weak = Object.entries(S.st.stats).filter(([, s]) => s.right + s.wrong >= 3).map(([id, s]) => [id, s.right / (s.right + s.wrong)]).sort((a, b) => a[1] - b[1]).slice(0, 6);
+  const ta = h("textarea", { id: "import-json", placeholder: "Paste the contents of course/.progress.json from the terminal trainer here" });
+  view(h("section", { class: "grid2" },
+    h("div", { class: "panel", style: "display:grid;gap:8px" }, h("h2", { text: "Progress" }),
+      h("div", {}, `Fundamentals: `, h("b", { class: "num", text: `${doneCount()}/${S.order.length}` }), " lessons passed"),
+      h("div", {}, `Answers: `, h("b", { class: "num", text: `${right + wrong}` }), ` (${right + wrong ? Math.round((100 * right) / (right + wrong)) : 0}% correct)`),
+      h("div", {}, "Review boxes (1 shaky … 5 mastered): ", h("b", { class: "num", text: boxes.join(" · ") })),
+      weak.length ? h("div", {}, "Weakest lessons: ", h("b", { text: weak.map(([id, a]) => `${id} (${Math.round(a * 100)}%)`).join(", ") })) : null,
+      fs().finals.length ? h("div", {}, "Finals: ", h("b", { text: fs().finals.map((e) => `${f2(e.grade, 0)}/30`).join(", ") })) : null,
+      h("div", { class: "muted", text: Store.mode === "cloud" ? "Saved to your account; it syncs between laptop and phone." : "Saved in this browser only. Open the published page to sync across devices." })),
+    h("div", { class: "panel", style: "display:grid;gap:8px" }, h("h2", { text: "Bring progress from the terminal" }),
+      h("p", { class: "muted", text: "Already used course/run.sh? Paste course/.progress.json to merge it in (passed lessons, review deck, finals)." }), ta,
+      h("div", { class: "row" }, h("button", { class: "btn primary", text: "Merge", onclick: () => { try { const t = JSON.parse(ta.value); t.updated = 0; S.st = mergeStates(S.st, t); Store.save(); toast("Progress merged."); route(); } catch { toast("That isn't valid JSON — paste the whole file."); } } }),
+        h("button", { class: "btn", text: "Copy my progress", onclick: () => { const txt = JSON.stringify(S.st); navigator.clipboard.writeText(txt).then(() => toast("Copied."), () => { ta.value = txt; ta.select(); toast("Selected — copy it with Ctrl+C."); }); } })))));
+}
+
+/* ---------- router ---------- */
+function route() {
+  const r = location.hash.slice(1) || "home";
+  setNav(r.startsWith("lesson-") || r.startsWith("unit-") ? "fundamentals" : r.startsWith("glesson-") || ["quiz", "exam", "map"].includes(r) ? "course" : r);
+  if (r.startsWith("lesson-")) return viewLesson(unhid(r.slice(7)));
+  if (r.startsWith("unit-")) return viewUnit(r.slice(5));
+  if (r.startsWith("glesson-")) return viewGLesson(unhid(r.slice(8)));
+  ({ home: viewHome, fundamentals: viewFundamentals, practice: viewPractice, review: viewReview, final: viewFinal, course: viewCourse, quiz: viewQuiz, exam: viewExam, glossary: viewGlossary, map: viewMap, progress: viewProgress }[r] || viewHome)();
+}
+window.addEventListener("hashchange", route);
+
+(async function start() {
+  try {
+    const res = await fetch("data.json"); S.D = await res.json();
+  } catch (e) { $("#app").replaceChildren(h("div", { class: "panel", text: "Couldn't load the course data (data.json). If you opened the file directly, run `course/run.sh web` instead." })); return; }
+  indexData();
+  S.st = Store.readLocal() || blankState(); Store.label(); route();
+  await Store.init(); if (!S.session) route();
+})();
+</script>

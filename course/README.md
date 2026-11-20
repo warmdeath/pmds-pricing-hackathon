@@ -12,6 +12,35 @@ what the mechanic is and where it is defined. It never says what an agent should
 do. The lessons teach general theory with textbook examples (bakeries, oil,
 bonds, used cars), not strategy for your agent.
 
+## Browser version (recommended): Margin Notes
+
+The same course in the browser, with interactive charts in the graph-heavy lessons
+(supply and demand with a tax, elasticity and revenue, cost curves, break-even,
+compounding and discounting, skew, normal probabilities, binomial/Poisson, the
+central limit theorem, regression, logit shares, monopoly, auction bid shading,
+diversification, newsvendor). It applies the same rules: lessons unlock in order,
+mastery checks need at least 75 %, and the Fundamentals final unlocks the general
+course.
+
+- **Published page** (laptop and phone):
+  https://claude.ai/artifact/Fy1XmEDNyKsrTZhTrzEcKG. It is private to your account.
+  Progress is saved there and syncs between devices; on the phone, use
+  **Review** for 5-minute sessions.
+- **Local** (offline, laptop only): run the command below and open
+  http://localhost:8765. Progress is then stored in that browser only.
+
+```bash
+course/run.sh web
+```
+
+- **Moving progress over:** the Progress page has a box for pasting
+  `course/.progress.json` from the terminal trainer, which merges it in.
+- **How it is built:** `course/web/build.py` exports the lesson files,
+  questions and glossary to `dist/data.json`. Python exercise generators can't
+  run in the browser, so it samples about 3,800 concrete practice exercises from
+  them. `course/web/app.html` is the app. After editing lessons, re-run the build
+  (and republish the page).
+
 ## Start here: Fundamentals
 
 Fundamentals is a separate section of **200 micro-lessons in 18 units**, built
